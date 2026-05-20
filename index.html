@@ -39,6 +39,71 @@
     --warn: #b66a00;
     --error: #d9365f;
   }
+  body[data-theme="light"] {
+    --bg: #f6f8fb;
+    --surface: #ffffff;
+    --surface2: #e9eef7;
+    --primary: #2563eb;
+    --accent: #0f766e;
+    --text: #172033;
+    --text2: #64748b;
+    --border: #cfd8e6;
+    --success: #15803d;
+    --warn: #b45309;
+    --error: #dc2626;
+  }
+  body[data-theme="forest"] {
+    --bg: #101913;
+    --surface: #17261c;
+    --surface2: #20372a;
+    --primary: #16a34a;
+    --accent: #86efac;
+    --text: #edf7ef;
+    --text2: #abc8b3;
+    --border: #31523d;
+    --success: #22c55e;
+    --warn: #eab308;
+    --error: #f87171;
+  }
+  body[data-theme="ocean"] {
+    --bg: #071a24;
+    --surface: #0d2a38;
+    --surface2: #12394b;
+    --primary: #0ea5e9;
+    --accent: #67e8f9;
+    --text: #eef9ff;
+    --text2: #a7c8d8;
+    --border: #1d536a;
+    --success: #34d399;
+    --warn: #fbbf24;
+    --error: #fb7185;
+  }
+  body[data-theme="dusk"] {
+    --bg: #171321;
+    --surface: #241c35;
+    --surface2: #33264a;
+    --primary: #8b5cf6;
+    --accent: #f0abfc;
+    --text: #faf5ff;
+    --text2: #c8b8dd;
+    --border: #4a3b64;
+    --success: #2dd4bf;
+    --warn: #f59e0b;
+    --error: #f43f5e;
+  }
+  body[data-theme="amber"] {
+    --bg: #21170b;
+    --surface: #332313;
+    --surface2: #493018;
+    --primary: #f59e0b;
+    --accent: #facc15;
+    --text: #fff7ed;
+    --text2: #dec9ad;
+    --border: #6a461d;
+    --success: #84cc16;
+    --warn: #f97316;
+    --error: #ef4444;
+  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: var(--font);
@@ -50,6 +115,77 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+  }
+  body > * {
+    position: relative;
+    z-index: 1;
+  }
+  body[data-theme="pink"]::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.42;
+    background-image:
+      url("data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23ff7caf' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' opacity='0.32'%3E%3Cpath d='M64 84c0-22 14-36 35-36s35 14 35 36c0 24-14 40-35 40S64 108 64 84Z'/%3E%3Cpath d='M73 55 62 39l4 23M126 55l11-16-4 23'/%3E%3Cpath d='M82 90h.1M116 90h.1M95 100c3 2 6 2 9 0'/%3E%3Cpath d='M49 55c7-8 17-8 26 0-8 5-17 5-26 0ZM75 55c9-8 19-8 27 0-9 5-18 5-27 0ZM73 55c2 6 2 11 0 16'/%3E%3C/g%3E%3Cg fill='%23ff4f9a' opacity='0.16'%3E%3Ccircle cx='35' cy='132' r='6'/%3E%3Ccircle cx='145' cy='34' r='4'/%3E%3Ccircle cx='151' cy='134' r='7'/%3E%3C/g%3E%3C/svg%3E"),
+      radial-gradient(circle at 24px 24px, rgba(255, 79, 154, 0.12) 0 5px, transparent 6px),
+      radial-gradient(circle at 78px 92px, rgba(255, 196, 225, 0.22) 0 7px, transparent 8px);
+    background-size: 190px 190px, 96px 96px, 132px 132px;
+    background-position: 24px 18px, 0 0, 35px 52px;
+  }
+  .pink-cursor-sparkle {
+    position: fixed;
+    width: 14px;
+    height: 14px;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    background: none;
+    color: transparent;
+    font-size: var(--heart-size, 18px);
+    line-height: 1;
+    text-align: center;
+    -webkit-text-stroke: max(1px, calc(var(--heart-size, 18px) * .08)) rgba(255, 0, 110, .92);
+    text-shadow:
+      0 0 1px rgba(255, 255, 255, .95),
+      0 0 6px rgba(255, 0, 110, .82),
+      0 0 14px rgba(139, 92, 246, .48);
+    animation: pinkHeartTrail 920ms cubic-bezier(.16, .9, .33, 1) forwards;
+  }
+  .pink-cursor-sparkle::before {
+    content: '♡';
+  }
+  .pink-cursor-sparkle::after {
+    content: '';
+    position: absolute;
+    left: 18%;
+    top: 12%;
+    width: 42%;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .95), rgba(255, 161, 211, .82), transparent);
+    box-shadow: 0 0 8px rgba(255, 255, 255, .9);
+    transform: rotate(-28deg);
+  }
+  @keyframes pinkHeartTrail {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(.2) rotate(var(--spark-rotate, 0deg));
+    }
+    18% {
+      opacity: 1;
+      transform: translate(calc(-50% + var(--spark-x-mid, 0px)), calc(-50% + var(--spark-y-mid, 0px))) scale(1.12) rotate(calc(var(--spark-rotate, 0deg) + 8deg));
+      filter: brightness(1.25) saturate(1.2);
+    }
+    46% {
+      opacity: .92;
+      transform: translate(calc(-50% + var(--spark-x-mid, 0px) * 1.4), calc(-50% + var(--spark-y-mid, 0px) * 1.4)) scale(.96) rotate(calc(var(--spark-rotate, 0deg) - 8deg));
+    }
+    100% {
+      opacity: 0;
+      transform: translate(calc(-50% + var(--spark-x, 0px)), calc(-50% + var(--spark-y, 0px))) scale(1.9) rotate(calc(var(--spark-rotate, 0deg) + 24deg));
+    }
   }
   /* Top Bar */
   #topbar {
@@ -292,7 +428,7 @@
   body[data-scene="openapi"] #center-panel {
     justify-content: flex-start;
     overflow-y: auto;
-    padding: 12px 18px 24px;
+    padding: 12px 14px 24px;
   }
   /* 不干预 SDK 内部的元素定位，否则会破坏触控事件层 */
 
@@ -320,9 +456,23 @@
     grid-column: 1 / -1;
   }
   #openapi-workbench {
-    width: min(1180px, 100%);
+    width: min(1480px, 100%);
     margin: 0 auto;
     display: block;
+  }
+  .openapi-workbench-layout {
+    display: grid;
+    grid-template-columns: minmax(520px, 1fr) minmax(420px, 0.82fr);
+    gap: 12px;
+    align-items: start;
+  }
+  .openapi-response-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+    position: sticky;
+    top: 0;
   }
   .openapi-hero {
     display: grid;
@@ -369,6 +519,7 @@
     font-family: var(--mono);
   }
   .openapi-section textarea { min-height: 112px; resize: vertical; }
+  #openapi-body { min-height: 190px; }
   .openapi-field input:focus, .openapi-field select:focus,
   .openapi-section input:focus, .openapi-section select:focus,
   .openapi-section textarea:focus { border-color: var(--accent); outline: none; }
@@ -479,7 +630,7 @@
   .openapi-preview-details .openapi-request-preview {
     margin-top: 6px;
   }
-  .openapi-result-output { min-height: 420px; max-height: 70vh; color: var(--text2); }
+  .openapi-result-output { height: 300px; min-height: 190px; max-height: 40vh; color: var(--text2); }
   .json-tree {
     font-family: var(--mono);
     font-size: var(--fs-caption);
@@ -524,9 +675,7 @@
   #openapi-result-panel { padding: 12px; gap: 10px; }
   #openapi-result-panel h3 { font-size: var(--fs-section); color: var(--accent); }
   #openapi-result-panel .hint { font-size: var(--fs-caption); color: var(--text2); line-height: 1.5; }
-  .openapi-result-section {
-    margin-top: 12px;
-  }
+  .openapi-result-section { margin-top: 0; }
   .openapi-result-toolbar {
     display: flex;
     gap: 6px;
@@ -546,7 +695,7 @@
     border-color: var(--primary);
   }
   .openapi-history {
-    margin-top: 12px;
+    margin-top: 0;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -574,6 +723,8 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
+    max-height: 360px;
+    overflow: auto;
   }
   .openapi-history-empty {
     color: var(--text2);
@@ -890,7 +1041,8 @@
     #live-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     #bytelive-layout { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) 180px; }
     #bytelive-menu { border-left: 0; border-top: 1px solid var(--border); }
-    .openapi-hero, .openapi-grid, .home-entry-grid, .home-tool-grid, .openapi-history-detail-grid { grid-template-columns: 1fr; }
+    .openapi-hero, .openapi-grid, .openapi-workbench-layout, .home-entry-grid, .home-tool-grid, .openapi-history-detail-grid { grid-template-columns: 1fr; }
+    .openapi-response-column { position: static; }
   }
 </style>
 </head>
@@ -925,7 +1077,12 @@
     主题
     <select id="theme-select">
       <option value="dark">深色</option>
-      <option value="pink">猛男粉</option>
+      <option value="light">浅色</option>
+      <option value="pink">樱花粉</option>
+      <option value="forest">森林绿</option>
+      <option value="ocean">海盐蓝</option>
+      <option value="dusk">暮色紫</option>
+      <option value="amber">琥珀橙</option>
     </select>
   </label>
 </div>
@@ -1226,49 +1383,53 @@
       </div>
     </div>
     <div id="openapi-workbench" class="openapi-only">
-      <div class="openapi-box openapi-section">
-        <h3>参数与请求体</h3>
-        <div class="openapi-doc-row">
-          <div>
-            <label>OpenAPI 文档链接</label>
-            <input id="openapi-doc-url" value="" placeholder="https://www.volcengine.com/docs/...">
+      <div class="openapi-workbench-layout">
+        <div class="openapi-box openapi-section">
+          <h3>参数与请求体</h3>
+          <div class="openapi-doc-row">
+            <div>
+              <label>OpenAPI 文档链接</label>
+              <input id="openapi-doc-url" value="" placeholder="https://www.volcengine.com/docs/...">
+            </div>
+            <button id="btn-openapi-doc-template" type="button">从文档生成模板</button>
           </div>
-          <button id="btn-openapi-doc-template" type="button">从文档生成模板</button>
-        </div>
-        <div id="openapi-doc-status" class="openapi-doc-status">粘贴火山引擎 OpenAPI 文档链接后，会优先从请求示例识别请求地址、方法和业务参数。</div>
-        <label>业务参数 JSON</label>
-        <textarea id="openapi-body" placeholder='{ }'>{}</textarea>
-        <div class="openapi-field-note">文档里的接口参数填这里即可。GET 会自动放到 URL 参数，POST 会自动放到请求体；Action 和 Version 会从请求地址中解析。</div>
-        <input id="openapi-query" type="hidden" value="{}">
-        <div class="openapi-actions">
-          <button class="primary" type="button" onclick="sendOpenApiRequest()">发送请求</button>
-          <button type="button" onclick="previewOpenApiRequest({ show: true })">生成请求预览</button>
-          <button type="button" onclick="copyOpenApiCurl()">复制 cURL</button>
-          <button type="button" onclick="saveOpenApiDraft()">保存草稿</button>
-          <button type="button" onclick="loadOpenApiDraft()">加载草稿</button>
-          <button type="button" onclick="clearOpenApiResult()">清空结果</button>
-        </div>
-        <details id="openapi-preview-details" class="openapi-preview-details">
-          <summary>请求预览</summary>
-          <div id="openapi-preview" class="openapi-request-preview">// 还没有生成请求</div>
-        </details>
-        <div id="openapi-result-panel" class="openapi-result-section">
-          <h3>OpenAPI 返回</h3>
-          <div class="hint">这里会展示 HTTP 状态、响应 JSON 和错误摘要。敏感字段会自动脱敏。</div>
-          <div class="openapi-result-toolbar">
-            <button id="openapi-result-view-tree" class="active" type="button">层级视图</button>
-            <button id="openapi-result-view-text" type="button">文本视图</button>
+          <div id="openapi-doc-status" class="openapi-doc-status">粘贴火山引擎 OpenAPI 文档链接后，会优先从请求示例识别请求地址、方法和业务参数。</div>
+          <label>业务参数 JSON</label>
+          <textarea id="openapi-body" placeholder='{ }'>{}</textarea>
+          <div class="openapi-field-note">文档里的接口参数填这里即可。GET 会自动放到 URL 参数，POST 会自动放到请求体；Action 和 Version 会从请求地址中解析。</div>
+          <input id="openapi-query" type="hidden" value="{}">
+          <div class="openapi-actions">
+            <button class="primary" type="button" onclick="sendOpenApiRequest()">发送请求</button>
+            <button type="button" onclick="previewOpenApiRequest({ show: true })">生成请求预览</button>
+            <button type="button" onclick="copyOpenApiCurl()">复制 cURL</button>
+            <button type="button" onclick="saveOpenApiDraft()">保存草稿</button>
+            <button type="button" onclick="loadOpenApiDraft()">加载草稿</button>
+            <button type="button" onclick="clearOpenApiResult()">清空结果</button>
           </div>
-          <div id="openapi-result" class="openapi-result-output">// 等待请求</div>
+          <details id="openapi-preview-details" class="openapi-preview-details">
+            <summary>请求预览</summary>
+            <div id="openapi-preview" class="openapi-request-preview">// 还没有生成请求</div>
+          </details>
         </div>
-        <div class="openapi-history">
-          <div class="openapi-history-header">
-            <h3>调用历史</h3>
-            <button id="btn-openapi-clear-history" type="button">清空历史</button>
+        <div class="openapi-response-column">
+          <div id="openapi-result-panel" class="openapi-result-section openapi-box">
+            <h3>OpenAPI 返回</h3>
+            <div class="hint">这里会展示 HTTP 状态、响应 JSON 和错误摘要。敏感字段会自动脱敏。</div>
+            <div class="openapi-result-toolbar">
+              <button id="openapi-result-view-tree" class="active" type="button">层级视图</button>
+              <button id="openapi-result-view-text" type="button">文本视图</button>
+            </div>
+            <div id="openapi-result" class="openapi-result-output">// 等待请求</div>
           </div>
-          <div class="hint">只记录请求地址、产品、Method、业务参数和返回状态，不保存 AK/SK 或签名头。</div>
-          <div id="openapi-history-list" class="openapi-history-list">
-            <div class="openapi-history-empty">暂无调用历史</div>
+          <div class="openapi-history openapi-box">
+            <div class="openapi-history-header">
+              <h3>调用历史</h3>
+              <button id="btn-openapi-clear-history" type="button">清空历史</button>
+            </div>
+            <div class="hint">只记录请求地址、产品、Method、业务参数和返回状态，不保存 AK/SK 或签名头。</div>
+            <div id="openapi-history-list" class="openapi-history-list">
+              <div class="openapi-history-empty">暂无调用历史</div>
+            </div>
           </div>
         </div>
       </div>
@@ -1438,11 +1599,60 @@ function updateState(state) {
 }
 
 function applyTheme(theme = localStorage.getItem('video-cloud-workbench-theme') || 'dark') {
-  const nextTheme = theme === 'pink' ? 'pink' : 'dark';
+  const themes = ['dark', 'light', 'pink', 'forest', 'ocean', 'dusk', 'amber'];
+  const nextTheme = themes.includes(theme) ? theme : 'dark';
   document.body.dataset.theme = nextTheme;
   const select = document.getElementById('theme-select');
   if (select) select.value = nextTheme;
   localStorage.setItem('video-cloud-workbench-theme', nextTheme);
+  setPinkCursorTrailEnabled(nextTheme === 'pink');
+}
+
+let pinkCursorTrailEnabled = false;
+let pinkCursorTrailLastAt = 0;
+let pinkCursorTrailLastPoint = null;
+
+function setPinkCursorTrailEnabled(enabled) {
+  pinkCursorTrailEnabled = enabled;
+  if (!enabled) {
+    document.querySelectorAll('.pink-cursor-sparkle').forEach(el => el.remove());
+  }
+  pinkCursorTrailLastPoint = null;
+}
+
+function createPinkCursorSparkle(event) {
+  if (!pinkCursorTrailEnabled) return;
+  const now = Date.now();
+  const point = { x: event.clientX, y: event.clientY };
+  const lastPoint = pinkCursorTrailLastPoint || point;
+  const distance = Math.hypot(point.x - lastPoint.x, point.y - lastPoint.y);
+  if (now - pinkCursorTrailLastAt < 18 && distance < 10) return;
+  pinkCursorTrailLastAt = now;
+  pinkCursorTrailLastPoint = point;
+  const count = distance > 70 ? 3 : (distance > 28 ? 2 : 1);
+  for (let i = 0; i < count; i += 1) {
+    const ratio = count === 1 ? 1 : i / (count - 1);
+    const x = lastPoint.x + (point.x - lastPoint.x) * ratio;
+    const y = lastPoint.y + (point.y - lastPoint.y) * ratio;
+    window.requestAnimationFrame(() => appendPinkCursorSparkle(x, y, point.x - lastPoint.x, point.y - lastPoint.y));
+  }
+}
+
+function appendPinkCursorSparkle(x, y, dx = 0, dy = 0) {
+  const sparkle = document.createElement('span');
+  sparkle.className = 'pink-cursor-sparkle';
+  sparkle.style.left = `${x}px`;
+  sparkle.style.top = `${y}px`;
+  const driftX = Math.round((Math.random() - 0.5) * 34 - dx * 0.06);
+  const driftY = Math.round(-18 - Math.random() * 24 - dy * 0.04);
+  sparkle.style.setProperty('--spark-x', `${driftX}px`);
+  sparkle.style.setProperty('--spark-y', `${driftY}px`);
+  sparkle.style.setProperty('--spark-x-mid', `${Math.round(driftX * 0.32)}px`);
+  sparkle.style.setProperty('--spark-y-mid', `${Math.round(driftY * 0.32)}px`);
+  sparkle.style.setProperty('--spark-rotate', `${Math.round((Math.random() - 0.5) * 42)}deg`);
+  sparkle.style.setProperty('--heart-size', `${12 + Math.round(Math.random() * 12)}px`);
+  document.body.appendChild(sparkle);
+  window.setTimeout(() => sparkle.remove(), 980);
 }
 
 function setScene(scene) {
@@ -3513,23 +3723,39 @@ function applyOpenApiRequestUrl(options = {}) {
   });
   const action = query.Action || query.action || getOpenApiValue('openapi-action');
   const version = query.Version || query.version || getOpenApiValue('openapi-version');
+  const businessQuery = {};
+  Object.entries(query).forEach(([key, value]) => {
+    if (!['Action', 'action', 'Version', 'version'].includes(key)) businessQuery[key] = value;
+  });
   const endpointPath = url.pathname && url.pathname !== '/' ? url.pathname : '/';
   const endpoint = `${url.origin}${endpointPath}`;
+  const displayUrl = new URL(endpoint);
+  if (action) displayUrl.searchParams.set('Action', action);
+  if (version) displayUrl.searchParams.set('Version', version);
+  const normalizedRequestUrl = displayUrl.href;
 
   setOpenApiValue('openapi-endpoint', endpoint);
   if (action) setOpenApiValue('openapi-action', action);
   if (version) setOpenApiValue('openapi-version', version);
-  setOpenApiValue('openapi-query', JSON.stringify({
-    ...parseOpenApiJson('openapi-query', {}, 'Query 参数 JSON'),
-    ...query,
-    ...(action ? { Action: action } : {}),
-    ...(version ? { Version: version } : {}),
-  }, null, 2));
+  setOpenApiValue('openapi-query', '{}');
+  if (Object.keys(businessQuery).length) {
+    try {
+      const currentBody = parseOpenApiJson('openapi-body', {}, '业务参数 JSON');
+      if (!Object.keys(currentBody).length) {
+        setOpenApiValue('openapi-body', JSON.stringify(businessQuery, null, 2));
+      }
+    } catch {
+      // 业务参数正在编辑中时不覆盖用户内容。
+    }
+  }
+  if (options.normalize !== false && normalizedRequestUrl !== raw) {
+    setOpenApiValue('openapi-request-url', normalizedRequestUrl);
+  }
 
   if (options.log !== false) {
     log(`已从请求地址解析: ${action || '未识别 Action'} / ${version || '未识别 Version'}`, action && version ? 'success' : 'warn');
   }
-  lastParsedOpenApiRequestUrl = raw;
+  lastParsedOpenApiRequestUrl = getOpenApiValue('openapi-request-url');
   return { endpoint, action, version, query };
 }
 
@@ -3610,10 +3836,9 @@ function getOpenApiConfig() {
   const action = getOpenApiValue('openapi-action');
   const version = getOpenApiValue('openapi-version');
   const method = getOpenApiValue('openapi-method') || 'POST';
-  const advancedQuery = parseOpenApiJson('openapi-query', {}, 'Query 参数 JSON');
   const businessParams = parseOpenApiJson('openapi-body', {}, '业务参数 JSON');
   const isGet = method.toUpperCase() === 'GET';
-  const query = isGet ? { ...businessParams, ...advancedQuery } : { ...advancedQuery };
+  const query = isGet ? { ...businessParams } : {};
   const body = isGet ? {} : businessParams;
   if (action) query.Action = action;
   if (version) query.Version = version;
@@ -3849,6 +4074,7 @@ document.querySelectorAll('[data-target-scene]').forEach(button => {
 document.getElementById('theme-select').addEventListener('change', event => {
   applyTheme(event.target.value);
 });
+document.addEventListener('mousemove', createPinkCursorSparkle);
 document.getElementById('btn-sdk-load').addEventListener('click', () => {
   loadSDK().catch(() => {}); // 错误已在 loadSDK 内部记录
 });
