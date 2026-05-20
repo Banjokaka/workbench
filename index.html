@@ -2608,7 +2608,6 @@ function buildUI() {
 }
 
 // ========== Volcengine OpenAPI Workbench ==========
-const openApiDangerWords = ['Create', 'Update', 'Delete', 'Set', 'Start', 'Stop', 'Restart', 'Enable', 'Disable', 'Bind', 'Unbind'];
 let openApiRequestUrlParseTimer = null;
 let openApiRequestUrlWatchTimer = null;
 let lastParsedOpenApiRequestUrl = '';
@@ -3943,13 +3942,6 @@ async function sendOpenApiRequest() {
   let signed;
   try {
     signed = await previewOpenApiRequest();
-    if (openApiDangerWords.some(word => signed.action?.startsWith(word))) {
-      const ok = window.confirm(`即将调用 ${signed.action}，这看起来可能会改变线上配置。确认继续吗？`);
-      if (!ok) {
-        setOpenApiResult('已取消发送。', 'info');
-        return;
-      }
-    }
     const response = await fetch(openApiProxyUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
