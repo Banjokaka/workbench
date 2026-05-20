@@ -243,26 +243,43 @@
   body[data-scene="home"] .cloud-only,
   body[data-scene="home"] .live-only,
   body[data-scene="home"] .openapi-only,
+  body[data-scene="home"] .callback-only,
   body[data-scene="cloud-phone"] .live-only,
   body[data-scene="cloud-phone"] .openapi-only,
+  body[data-scene="cloud-phone"] .callback-only,
   body[data-scene="cloud-phone"] .home-only,
   body[data-scene="enterprise-live"] .cloud-only,
   body[data-scene="enterprise-live"] .openapi-only,
+  body[data-scene="enterprise-live"] .callback-only,
   body[data-scene="enterprise-live"] .home-only,
   body[data-scene="openapi"] .cloud-only,
   body[data-scene="openapi"] .live-only,
-  body[data-scene="openapi"] .home-only { display: none !important; }
+  body[data-scene="openapi"] .callback-only,
+  body[data-scene="openapi"] .home-only,
+  body[data-scene="callback"] .cloud-only,
+  body[data-scene="callback"] .live-only,
+  body[data-scene="callback"] .openapi-only,
+  body[data-scene="callback"] .home-only { display: none !important; }
   body[data-scene="home"] #sidebar,
   body[data-scene="home"] #api-panel,
   body[data-scene="home"] #live-api-panel,
   body[data-scene="home"] #log-panel,
   body[data-scene="home"] #state-badge,
   body[data-scene="home"] #version-display,
-  body[data-scene="home"] .workspace-only { display: none !important; }
+  body[data-scene="home"] .workspace-only,
+  body[data-scene="callback"] #sidebar,
+  body[data-scene="callback"] #api-panel,
+  body[data-scene="callback"] #live-api-panel,
+  body[data-scene="callback"] #state-badge,
+  body[data-scene="callback"] #version-display { display: none !important; }
   body[data-scene="openapi"] #log-panel { height: 34px; }
   body[data-scene="openapi"] #log-output { display: none; }
   body[data-scene="openapi"].log-expanded #log-panel { height: 180px; }
   body[data-scene="openapi"].log-expanded #log-output { display: block; }
+  body[data-scene="callback"] #log-panel { height: 34px; }
+  body[data-scene="callback"] #log-output { display: none; }
+  body[data-scene="callback"].log-expanded #log-panel { height: 180px; }
+  body[data-scene="callback"].log-expanded #log-output { display: block; }
 
   /* Layout */
   #main {
@@ -316,6 +333,28 @@
   }
   body[data-scene="openapi"] #sidebar .section {
     padding: 8px;
+  }
+  .credential-status {
+    margin: 8px 0 6px;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(249, 199, 79, .55);
+    background: rgba(249, 199, 79, .12);
+    color: var(--warn);
+    font-size: var(--fs-caption);
+    line-height: 1.45;
+  }
+  .credential-status.ready {
+    border-color: rgba(46, 204, 113, .35);
+    background: rgba(46, 204, 113, .10);
+    color: var(--success);
+  }
+  .credential-status.attention {
+    animation: credentialPulse 1s ease-in-out 2;
+  }
+  @keyframes credentialPulse {
+    0%, 100% { box-shadow: none; }
+    50% { box-shadow: 0 0 0 3px rgba(249, 199, 79, .28); }
   }
   #sidebar .section summary {
     font-size: var(--fs-control); font-weight: 600; cursor: pointer;
@@ -425,7 +464,8 @@
     min-height: 150px;
     text-decoration: none;
   }
-  body[data-scene="openapi"] #center-panel {
+  body[data-scene="openapi"] #center-panel,
+  body[data-scene="callback"] #center-panel {
     justify-content: flex-start;
     overflow-y: auto;
     padding: 12px 14px 24px;
@@ -455,10 +495,116 @@
   .openapi-target-grid .full {
     grid-column: 1 / -1;
   }
+  .openapi-board-fields {
+    display: grid;
+    gap: 6px;
+  }
+  .openapi-credential-section {
+    border: 1px solid rgba(249, 199, 79, .28);
+  }
   #openapi-workbench {
     width: min(1480px, 100%);
     margin: 0 auto;
     display: block;
+  }
+  #callback-workbench {
+    width: min(1280px, 100%);
+    margin: 0 auto;
+  }
+  .callback-layout {
+    display: grid;
+    grid-template-columns: minmax(420px, .88fr) minmax(440px, 1fr);
+    gap: 12px;
+    align-items: start;
+  }
+  .callback-url-preview {
+    font-family: var(--mono);
+    font-size: var(--fs-caption);
+    color: var(--accent);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 9px;
+    word-break: break-all;
+  }
+  .callback-output { color: var(--text2); }
+  .callback-record-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: var(--text);
+  }
+  .callback-search {
+    margin-bottom: 10px;
+  }
+  .callback-search input {
+    width: 100%;
+    padding: 7px 9px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font-size: var(--fs-control);
+    font-family: var(--font);
+  }
+  .callback-search input:focus {
+    border-color: var(--accent);
+    outline: none;
+  }
+  .callback-record-count {
+    color: var(--text2);
+    font-size: var(--fs-caption);
+    margin-bottom: 8px;
+  }
+  .callback-record-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--surface);
+    overflow: hidden;
+  }
+  .callback-record-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    color: var(--accent);
+    font-size: var(--fs-caption);
+    font-weight: 700;
+  }
+  .callback-record-title span {
+    margin-left: auto;
+    color: var(--text2);
+    font-weight: 500;
+    font-family: var(--mono);
+  }
+  .callback-record-body {
+    padding: 8px 10px 10px;
+  }
+  .callback-record-raw {
+    border-top: 1px solid var(--border);
+    padding: 8px 10px 10px;
+  }
+  .callback-record-raw summary {
+    cursor: pointer;
+    color: var(--accent);
+    font-size: var(--fs-caption);
+    font-weight: 700;
+    user-select: none;
+  }
+  .callback-record-raw pre {
+    margin-top: 8px;
+    max-height: 220px;
+    overflow: auto;
+    padding: 8px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: var(--fs-caption);
+    white-space: pre-wrap;
+    word-break: break-all;
   }
   .openapi-workbench-layout {
     display: grid;
@@ -631,6 +777,11 @@
     margin-top: 6px;
   }
   .openapi-result-output { height: 300px; min-height: 190px; max-height: 40vh; color: var(--text2); }
+  #callback-output.callback-output {
+    height: auto;
+    min-height: 560px;
+    max-height: none;
+  }
   .json-tree {
     font-family: var(--mono);
     font-size: var(--fs-caption);
@@ -1041,7 +1192,7 @@
     #live-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     #bytelive-layout { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) 180px; }
     #bytelive-menu { border-left: 0; border-top: 1px solid var(--border); }
-    .openapi-hero, .openapi-grid, .openapi-workbench-layout, .home-entry-grid, .home-tool-grid, .openapi-history-detail-grid { grid-template-columns: 1fr; }
+    .openapi-hero, .openapi-grid, .openapi-workbench-layout, .callback-layout, .home-entry-grid, .home-tool-grid, .openapi-history-detail-grid { grid-template-columns: 1fr; }
     .openapi-response-column { position: static; }
   }
 </style>
@@ -1056,6 +1207,7 @@
     <button id="scene-cloud-phone" type="button">云手机</button>
     <button id="scene-enterprise-live" type="button">企业直播</button>
     <button id="scene-openapi" type="button">OpenAPI</button>
+    <button id="scene-callback" type="button">回调调试</button>
   </div>
   <span id="state-badge" class="badge badge-disconnected">未连接</span>
   <span style="font-size:var(--fs-caption);color:var(--text2)" id="version-display"></span>
@@ -1252,16 +1404,9 @@
       <span class="hint" style="margin-top:6px">本地 localhost 调试可能无法播放预告和回放，线上调试效果更完整</span>
     </details>
 
-    <div class="section openapi-only">
-      <h3>OpenAPI 鉴权</h3>
-      <label>平台</label>
-      <select id="openapi-platform"></select>
-      <label>产品</label>
-      <select id="openapi-product-kind"></select>
-      <label>区域</label>
-      <select id="openapi-product"></select>
-      <label>Region</label>
-      <input id="openapi-region" value="" placeholder="选择产品后自动填充" readonly>
+    <div class="section openapi-only openapi-credential-section">
+      <h3>需要填写</h3>
+      <div id="openapi-credential-status" class="credential-status">发送 OpenAPI 前需要填写 AK/SK。</div>
       <label>已保存 AK/SK</label>
       <select id="openapi-credential-profile"></select>
       <label>保存名称</label>
@@ -1274,40 +1419,39 @@
         <button id="btn-openapi-save-credentials" type="button" style="flex:1;font-size:var(--fs-control)">保存 AK/SK</button>
         <button id="btn-openapi-delete-credentials" type="button" style="font-size:var(--fs-control)">删除</button>
       </div>
-      <span class="hint">AK/SK 只临时保存在当前页面会话中，关闭页面后清除；保存名称用于区分同一产品下的多组密钥。</span>
+      <span class="hint">AK/SK 只临时保存在当前页面会话中，关闭页面后清除；切换产品不会自动更换密钥，请按需手动选择。</span>
     </div>
 
-    <details class="section openapi-only" open>
-      <summary>请求目标</summary>
+
+    <div class="section openapi-only">
+      <h3>OpenAPI 看板</h3>
       <label>请求地址</label>
       <input id="openapi-request-url" value="" placeholder="https://open.volcengineapi.com?Action=DetailPod&Version=2025-05-01">
       <span class="hint">粘贴火山 OpenAPI 文档里的请求地址，会自动拆出 Endpoint / Action / Version；Service 和 Region 由产品选择自动填充</span>
-      <div class="openapi-target-grid">
-        <div class="full">
-          <label>Endpoint</label>
-          <input id="openapi-endpoint" value="" placeholder="https://open.volcengineapi.com/">
-        </div>
-        <div>
-          <label>Service</label>
-          <input id="openapi-service" value="" placeholder="选择产品后自动填充" readonly>
-        </div>
-        <div>
-          <label>Method</label>
-          <select id="openapi-method">
-            <option value="POST">POST</option>
-            <option value="GET">GET</option>
-          </select>
-        </div>
-        <div>
-          <label>Version</label>
-          <input id="openapi-version" value="" placeholder="API Version">
-        </div>
-        <div>
-          <label>Action</label>
-          <input id="openapi-action" value="" placeholder="OpenAPI Action">
-        </div>
+      <label>平台</label>
+      <select id="openapi-platform"></select>
+      <label>产品</label>
+      <select id="openapi-product-kind"></select>
+      <label>区域</label>
+      <select id="openapi-product"></select>
+      <div class="openapi-board-fields" style="margin-top:8px">
+        <label>Region</label>
+        <input id="openapi-region" value="" placeholder="选择产品后自动填充">
+        <label>Endpoint</label>
+        <input id="openapi-endpoint" value="" placeholder="https://open.volcengineapi.com/">
+        <label>Service</label>
+        <input id="openapi-service" value="" placeholder="选择产品后自动填充">
+        <label>Method</label>
+        <select id="openapi-method">
+          <option value="POST">POST</option>
+          <option value="GET">GET</option>
+        </select>
+        <label>Version</label>
+        <input id="openapi-version" value="" placeholder="API Version">
+        <label>Action</label>
+        <input id="openapi-action" value="" placeholder="OpenAPI Action">
       </div>
-    </details>
+    </div>
 
   </div>
 
@@ -1335,6 +1479,12 @@
           <p>选择产品和区域，保存临时 AK/SK，粘贴请求地址并发送签名后的 OpenAPI 请求。</p>
           <span>进入 OpenAPI</span>
         </button>
+        <button class="home-entry-card" type="button" data-target-scene="callback">
+          <span class="home-entry-icon">CB</span>
+          <h2>回调调试</h2>
+          <p>维护回调接收地址，解析回调 JSON，用层级视图快速确认事件内容。</p>
+          <span>进入回调调试</span>
+        </button>
       </div>
       <div class="home-tool-section">
         <div class="home-section-title">交付常用站点</div>
@@ -1351,6 +1501,34 @@
             <p>打开多视频同步对比工具，用于并排检查不同视频源、码率或转码结果的画质差异。</p>
             <span>打开站点</span>
           </a>
+        </div>
+      </div>
+    </div>
+    <div id="callback-workbench" class="callback-only">
+      <div class="callback-layout">
+        <div class="openapi-box openapi-section">
+          <h3>回调地址</h3>
+          <input id="callback-function-url" value="" placeholder="https://example.com/callback">
+          <div class="openapi-field-note">把这个地址配置到火山引擎控制台或回调配置里。接收服务负责接收回调，页面负责查看和解析。</div>
+          <div id="callback-url-preview" class="callback-url-preview">// 请先填写回调地址</div>
+          <div class="openapi-actions">
+            <button class="primary" type="button" onclick="saveCallbackConfig()">保存配置</button>
+            <button type="button" onclick="copyCallbackUrl()">复制回调地址</button>
+            <button type="button" onclick="fetchCallbackRecords()">查看最近回调</button>
+            <button id="btn-callback-auto-refresh" type="button" onclick="toggleCallbackAutoRefresh()">自动刷新</button>
+          </div>
+          <h3>JSON 解析</h3>
+          <label>回调 JSON</label>
+          <textarea id="callback-log-input" placeholder='粘贴回调 JSON，例如：{"EventType":"ActivityUserEnterCallBack","ActivityID":"123"}'></textarea>
+          <div class="openapi-actions">
+            <button class="primary" type="button" onclick="parseCallbackJson()">解析 JSON</button>
+            <button type="button" onclick="clearCallbackLog()">清空</button>
+          </div>
+        </div>
+        <div class="openapi-box openapi-section">
+          <h3>解析结果</h3>
+          <div class="hint">直接展示粘贴的 JSON 层级结构。支持标准 JSON，也会兼容常见的单引号对象格式。</div>
+          <div id="callback-output" class="openapi-result-output callback-output">// 等待解析</div>
         </div>
       </div>
     </div>
@@ -1662,6 +1840,7 @@ function setScene(scene) {
   document.getElementById('scene-cloud-phone').classList.toggle('active', scene === 'cloud-phone');
   document.getElementById('scene-enterprise-live').classList.toggle('active', scene === 'enterprise-live');
   document.getElementById('scene-openapi').classList.toggle('active', scene === 'openapi');
+  document.getElementById('scene-callback').classList.toggle('active', scene === 'callback');
   if (scene === 'home') {
     document.getElementById('version-display').textContent = '';
   } else if (scene === 'enterprise-live') {
@@ -1672,6 +1851,10 @@ function setScene(scene) {
     document.getElementById('state-badge').textContent = 'OpenAPI';
     document.getElementById('state-badge').className = 'badge badge-connecting';
     document.getElementById('version-display').textContent = '火山引擎签名调试';
+  } else if (scene === 'callback') {
+    document.getElementById('state-badge').textContent = 'Callback';
+    document.getElementById('state-badge').className = 'badge badge-connecting';
+    document.getElementById('version-display').textContent = '回调调试';
   } else {
     updateState(connectionState);
     document.getElementById('version-display').textContent =
@@ -2640,12 +2823,18 @@ const openApiServiceProductMap = {
   rtc: 'RTC',
 };
 const openApiDocLibraryServiceMap = {
+  '4': 'vod',
   '3019': 'livesaas',
-  '6348': 'acep',
+  '6348': 'rtc',
   'byteplus-livesaas': 'livesaas',
   'byteplus-media-live': 'live',
   'byteplus-vod': 'vod',
   'byteplus-rtc': 'rtc',
+};
+const openApiDefaultProductIds = {
+  '火山引擎|RTC': 'volc-rtc-cn-north-1',
+  '火山引擎|视频点播': 'volc-vod-cn-north-1',
+  'byteplus|视频点播': 'byteplus-vod-ap-southeast-1',
 };
 
 function getOpenApiValue(id) {
@@ -2666,24 +2855,36 @@ function getOpenApiProductLabel(product) {
   return `${product.platform}-${product.product} / ${product.regionLabel}`;
 }
 
-function getOpenApiCredentialScope() {
-  const product = getSelectedOpenApiProduct();
-  const platform = product?.platform || getOpenApiValue('openapi-platform');
-  const productKind = product?.product || getOpenApiValue('openapi-product-kind');
-  if (!platform || !productKind) return '';
-  return `${platform}::${productKind}`;
-}
-
 function getOpenApiCredentialStore() {
   try {
-    return JSON.parse(sessionStorage.getItem(openApiCredentialSessionKey) || '{}');
+    const raw = JSON.parse(sessionStorage.getItem(openApiCredentialSessionKey) || '{}');
+    if (raw.profiles) {
+      return {
+        profiles: raw.profiles || {},
+        activeName: raw.activeName || '',
+      };
+    }
+    const profiles = {};
+    let activeName = '';
+    Object.entries(raw || {}).forEach(([scope, bucket]) => {
+      const normalizedBucket = getOpenApiCredentialBucket(bucket || {});
+      Object.entries(normalizedBucket.profiles || {}).forEach(([name, value]) => {
+        let nextName = name;
+        if (profiles[nextName]) nextName = `${scope}-${name}`;
+        profiles[nextName] = value;
+        if (!activeName) activeName = nextName;
+      });
+      if (!activeName && normalizedBucket.activeName) activeName = normalizedBucket.activeName;
+    });
+    const store = { profiles, activeName };
+    sessionStorage.setItem(openApiCredentialSessionKey, JSON.stringify(store));
+    return store;
   } catch {
-    return {};
+    return { profiles: {}, activeName: '' };
   }
 }
 
-function getOpenApiCredentialBucket(store, scope) {
-  const bucket = store[scope] || {};
+function getOpenApiCredentialBucket(bucket = {}) {
   if (bucket.ak || bucket.sk) {
     return {
       profiles: {
@@ -2710,37 +2911,53 @@ function setOpenApiCredentialFields(credentials = null, name = '') {
   setOpenApiValue('openapi-ak', credentials?.ak || '');
   setOpenApiValue('openapi-sk', credentials?.sk || '');
   setOpenApiValue('openapi-credential-name', name || '');
+  updateOpenApiCredentialStatus();
+}
+
+function updateOpenApiCredentialStatus(options = {}) {
+  const el = document.getElementById('openapi-credential-status');
+  if (!el) return;
+  const ak = getOpenApiValue('openapi-ak');
+  const sk = getOpenApiValue('openapi-sk');
+  const profile = getOpenApiSelectedCredentialName() || getOpenApiValue('openapi-credential-name');
+  const ready = !!ak && !!sk;
+  el.classList.toggle('ready', ready);
+  el.textContent = ready
+    ? `AK/SK 已填写${profile ? `：${profile}` : ''}，将用于当前请求。`
+    : '发送 OpenAPI 前需要填写 AK/SK。';
+  if (options.attention) {
+    el.classList.remove('attention');
+    void el.offsetWidth;
+    el.classList.add('attention');
+    el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
 }
 
 function refreshOpenApiCredentialProfiles(selectedName = '') {
   const select = document.getElementById('openapi-credential-profile');
   if (!select) return;
-  const scope = getOpenApiCredentialScope();
   const store = getOpenApiCredentialStore();
-  const bucket = scope ? getOpenApiCredentialBucket(store, scope) : { profiles: {}, activeName: '' };
-  const names = Object.keys(bucket.profiles);
+  const names = Object.keys(store.profiles || {});
   setSelectOptions(
     select,
     names.map(name => ({ value: name, label: name })),
     names.length ? '选择已保存 AK/SK' : '暂无已保存 AK/SK'
   );
-  const nextName = selectedName || bucket.activeName || '';
-  if (nextName && bucket.profiles[nextName]) {
-    setOpenApiValue('openapi-credential-profile', nextName);
+  const nextName = selectedName || store.activeName || '';
+  if (nextName && store.profiles[nextName]) {
+    select.value = nextName;
+  } else {
+    select.value = '';
   }
+  updateOpenApiCredentialStatus();
 }
 
 function saveOpenApiSessionCredentials(options = {}) {
-  const scope = getOpenApiCredentialScope();
-  if (!scope) {
-    if (options.notify) log('请先选择平台和产品，再保存 AK/SK', 'warn');
-    return;
-  }
   const ak = getOpenApiValue('openapi-ak');
   const sk = getOpenApiValue('openapi-sk');
   const name = getOpenApiValue('openapi-credential-name') || getOpenApiSelectedCredentialName();
   if (!name) {
-    if (options.notify) log('请先填写保存名称，用来区分同一产品下的多组 AK/SK', 'warn');
+    if (options.notify) log('请先填写保存名称，用来区分不同 AK/SK', 'warn');
     return;
   }
   if (!ak || !sk) {
@@ -2748,62 +2965,58 @@ function saveOpenApiSessionCredentials(options = {}) {
     return;
   }
   const store = getOpenApiCredentialStore();
-  const bucket = getOpenApiCredentialBucket(store, scope);
-  bucket.profiles[name] = { ak, sk, updatedAt: Date.now() };
-  bucket.activeName = name;
-  store[scope] = bucket;
+  store.profiles = store.profiles || {};
+  store.profiles[name] = { ak, sk, updatedAt: Date.now() };
+  store.activeName = name;
   sessionStorage.setItem(openApiCredentialSessionKey, JSON.stringify(store));
   refreshOpenApiCredentialProfiles(name);
+  setOpenApiCredentialFields(store.profiles[name], name);
   if (options.notify) log(`AK/SK「${name}」已临时保存，关闭页面后会清除`, 'success');
 }
 
 function restoreOpenApiSessionCredentials() {
-  const scope = getOpenApiCredentialScope();
-  if (!scope) {
+  const store = getOpenApiCredentialStore();
+  const name = store.activeName || '';
+  refreshOpenApiCredentialProfiles(name);
+  setOpenApiCredentialFields(store.profiles?.[name], name);
+}
+
+function applyOpenApiCredentialProfile(name = getOpenApiSelectedCredentialName()) {
+  if (!name) {
+    setOpenApiCredentialFields();
+    return;
+  }
+  const store = getOpenApiCredentialStore();
+  const credentials = store.profiles?.[name];
+  if (!credentials) {
     refreshOpenApiCredentialProfiles();
     setOpenApiCredentialFields();
     return;
   }
-  const bucket = getOpenApiCredentialBucket(getOpenApiCredentialStore(), scope);
-  const name = bucket.activeName || '';
-  refreshOpenApiCredentialProfiles(name);
-  setOpenApiCredentialFields(bucket.profiles[name], name);
-}
-
-function applyOpenApiCredentialProfile(name = getOpenApiSelectedCredentialName()) {
-  const scope = getOpenApiCredentialScope();
-  if (!scope || !name) {
-    setOpenApiCredentialFields();
-    return;
-  }
-  const bucket = getOpenApiCredentialBucket(getOpenApiCredentialStore(), scope);
-  setOpenApiCredentialFields(bucket.profiles[name], name);
-  const store = getOpenApiCredentialStore();
-  store[scope] = { ...bucket, activeName: name };
+  setOpenApiCredentialFields(credentials, name);
+  setOpenApiValue('openapi-credential-profile', name);
+  store.activeName = name;
   sessionStorage.setItem(openApiCredentialSessionKey, JSON.stringify(store));
 }
 
 function deleteOpenApiSessionCredentials() {
-  const scope = getOpenApiCredentialScope();
   const name = getOpenApiSelectedCredentialName() || getOpenApiValue('openapi-credential-name');
-  if (!scope || !name) {
+  if (!name) {
     log('请先选择要删除的 AK/SK', 'warn');
     return;
   }
   const store = getOpenApiCredentialStore();
-  const bucket = getOpenApiCredentialBucket(store, scope);
-  if (!bucket.profiles[name]) {
+  if (!store.profiles?.[name]) {
     log('没有找到要删除的 AK/SK', 'warn');
     return;
   }
-  delete bucket.profiles[name];
-  const names = Object.keys(bucket.profiles);
-  bucket.activeName = names[0] || '';
-  if (names.length) store[scope] = bucket;
-  else delete store[scope];
+  delete store.profiles[name];
+  const names = Object.keys(store.profiles);
+  store.activeName = names[0] || '';
   sessionStorage.setItem(openApiCredentialSessionKey, JSON.stringify(store));
-  refreshOpenApiCredentialProfiles(bucket.activeName);
-  setOpenApiCredentialFields(bucket.profiles[bucket.activeName], bucket.activeName);
+  refreshOpenApiCredentialProfiles(store.activeName);
+  setOpenApiCredentialFields(store.profiles[store.activeName], store.activeName);
+  updateOpenApiCredentialStatus();
   log(`AK/SK「${name}」已删除`, 'info');
 }
 
@@ -3000,10 +3213,12 @@ function applyOpenApiProduct(productId = getOpenApiValue('openapi-product')) {
   if (!product) {
     setOpenApiValue('openapi-service', '');
     setOpenApiValue('openapi-region', '');
+    updateOpenApiCredentialStatus();
     return null;
   }
   setOpenApiValue('openapi-service', product.service);
   setOpenApiValue('openapi-region', product.region);
+  updateOpenApiCredentialStatus();
   return product;
 }
 
@@ -3033,7 +3248,7 @@ function syncOpenApiProductCascader(productId) {
   updateOpenApiProductKindOptions(product.platform, product.product);
   updateOpenApiRegionOptions(product.platform, product.product, product.id);
   applyOpenApiProduct(product.id);
-  restoreOpenApiSessionCredentials();
+  updateOpenApiCredentialStatus();
 }
 
 function applyOpenApiDocProductInference(inferred = {}) {
@@ -3042,9 +3257,14 @@ function applyOpenApiDocProductInference(inferred = {}) {
     return openApiProducts.find(item => item.id === inferred.productId) || null;
   }
   if (inferred.platform && inferred.productKind) {
+    const defaultProductId = openApiDefaultProductIds[`${inferred.platform}|${inferred.productKind}`];
+    if (defaultProductId) {
+      syncOpenApiProductCascader(defaultProductId);
+      return openApiProducts.find(item => item.id === defaultProductId) || null;
+    }
     setOpenApiValue('openapi-platform', inferred.platform);
     updateOpenApiProductKindOptions(inferred.platform, inferred.productKind);
-    restoreOpenApiSessionCredentials();
+    updateOpenApiCredentialStatus();
     return { platform: inferred.platform, product: inferred.productKind };
   }
   return null;
@@ -3082,7 +3302,7 @@ function updateOpenApiRegionOptions(
   if (nextProductId) {
     setOpenApiValue('openapi-product', nextProductId);
     applyOpenApiProduct(nextProductId);
-    restoreOpenApiSessionCredentials();
+    updateOpenApiCredentialStatus();
   } else {
     applyOpenApiProduct('');
   }
@@ -3325,9 +3545,15 @@ function getOpenApiDocApiUrl(url) {
     return api.href;
   }
   if (/byteplus\.com$/.test(parsed.hostname)) {
-    const match = parsed.pathname.match(/^\/([^/]+)\/docs\/([^/]+)\/([^/?#]+)/);
+    const match = parsed.hostname === 'docs.byteplus.com'
+      ? parsed.pathname.match(/^\/([^/]+)\/docs\/([^/]+)\/([^/?#]+)/)
+      : parsed.pathname.match(/^\/docs\/([^/]+)\/([^/?#]+)/);
     if (!match) return '';
-    const [, lang, libraryCode, documentCode] = match;
+    const lang = parsed.hostname === 'docs.byteplus.com'
+      ? match[1]
+      : (parsed.searchParams.get('lang') || 'en');
+    const libraryCode = parsed.hostname === 'docs.byteplus.com' ? match[2] : match[1];
+    const documentCode = parsed.hostname === 'docs.byteplus.com' ? match[3] : match[2];
     const api = new URL('https://www.byteplus.com/api/doc/getDocDetail');
     api.searchParams.set('LibraryCode', libraryCode);
     api.searchParams.set('DocumentCode', documentCode);
@@ -3379,11 +3605,22 @@ function normalizeOpenApiDocDeltaText(value) {
     const zones = Object.values(parsed?.data || {});
     const chunks = [];
     zones.forEach(zone => {
-      const zoneText = (zone?.ops || [])
-        .map(op => String(op?.insert || ''))
-        .join('')
-        .replace(/^\*/gm, '')
-        .trim();
+      const zoneChunks = [];
+      (zone?.ops || []).forEach(op => {
+        zoneChunks.push(String(op?.insert || ''));
+        const apiSampleData = op?.attributes?.apiSampleData;
+        if (apiSampleData) {
+          try {
+            const sample = JSON.parse(apiSampleData);
+            (sample?.data || []).forEach(item => {
+              if (item?.inputCode) zoneChunks.push(`\n输入示例\n${item.inputCode}\n`);
+            });
+          } catch {
+            zoneChunks.push(`\n输入示例\n${apiSampleData}\n`);
+          }
+        }
+      });
+      const zoneText = zoneChunks.join('').replace(/^\*/gm, '').trim();
       if (zoneText) chunks.push(zoneText);
     });
     return chunks.join('\n');
@@ -3395,6 +3632,11 @@ function normalizeOpenApiDocDeltaText(value) {
 function cleanOpenApiDocCell(value) {
   return String(value || '')
     .replace(/<[^>]+>/g, '')
+    .replace(/&quot;/g, '"')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&nbsp;/g, ' ')
     .replace(/[`*_]/g, '')
     .replace(/\\n/g, ' ')
     .trim();
@@ -3407,6 +3649,32 @@ function getOpenApiDocDefaultValue(typeText = '') {
   if (type.includes('int') || type.includes('float') || type.includes('double') || type.includes('number') || type.includes('long') || type.includes('数字')) return 0;
   if (type.includes('bool') || type.includes('boolean') || type.includes('布尔')) return false;
   return '';
+}
+
+function getOpenApiDocExampleValue(typeText = '', exampleText = '') {
+  const cleanExample = cleanOpenApiDocCell(exampleText).replace(/\s+/g, ' ').trim();
+  const fallback = getOpenApiDocDefaultValue(typeText);
+  if (!cleanExample) return fallback;
+  const type = typeText.toLowerCase();
+  if (type.includes('bool') || type.includes('boolean') || type.includes('布尔')) {
+    if (/^true$/i.test(cleanExample)) return true;
+    if (/^false$/i.test(cleanExample)) return false;
+    return fallback;
+  }
+  if (type.includes('int') || type.includes('float') || type.includes('double') || type.includes('number') || type.includes('long') || type.includes('数字')) {
+    const numeric = cleanExample.replace(/\*/g, '');
+    const value = Number(numeric);
+    return Number.isFinite(value) ? value : fallback;
+  }
+  if (type.includes('array') || type.includes('list') || type.includes('[]') || type.includes('数组')
+    || type.includes('object') || type.includes('map') || type.includes('struct') || type.includes('对象')) {
+    try {
+      return JSON.parse(sanitizeOpenApiDocJsonExample(cleanExample));
+    } catch {
+      return fallback;
+    }
+  }
+  return cleanExample;
 }
 
 function setOpenApiTemplateValue(target, rawName, value) {
@@ -3430,7 +3698,65 @@ function setOpenApiTemplateValue(target, rawName, value) {
   });
 }
 
+function extractBalancedOpenApiDocBlock(text, startIndex, openChar, closeChar) {
+  let depth = 0;
+  let inString = false;
+  let escaped = false;
+  let start = -1;
+  for (let i = startIndex; i < text.length; i += 1) {
+    const ch = text[i];
+    if (inString) {
+      if (escaped) {
+        escaped = false;
+      } else if (ch === '\\') {
+        escaped = true;
+      } else if (ch === '"') {
+        inString = false;
+      }
+      continue;
+    }
+    if (ch === '"') {
+      inString = true;
+    } else if (ch === openChar) {
+      if (depth === 0) start = i;
+      depth += 1;
+    } else if (ch === closeChar) {
+      if (depth > 0) depth -= 1;
+      if (depth === 0 && start >= 0) return text.slice(start, i + 1);
+    }
+  }
+  return '';
+}
+
+function parseOpenApiDocMixinReactTables(text) {
+  const requestSection = text.match(/(?:^|\n)##\s*请求参数[\s\S]*?(?=\n##\s*(?:返回参数|请求示例|返回示例|错误码)|$)/)?.[0]
+    || text.match(/请求参数[\s\S]*?(?:返回参数|请求示例|返回示例|错误码|$)/)?.[0]
+    || text;
+  const template = {};
+  const dataRegex = /const\s+data\s*=\s*\[/g;
+  let match;
+  while ((match = dataRegex.exec(requestSection))) {
+    const arrayStart = requestSection.indexOf('[', match.index);
+    const rawArray = extractBalancedOpenApiDocBlock(requestSection, arrayStart, '[', ']');
+    if (!rawArray) continue;
+    try {
+      const rows = JSON.parse(rawArray);
+      rows.forEach(row => {
+        if (!row?.name) return;
+        const value = getOpenApiDocExampleValue(row.type || '', row.example || '');
+        setOpenApiTemplateValue(template, row.name, value);
+      });
+    } catch {
+      // 继续尝试后面的参数表。
+    }
+    dataRegex.lastIndex = arrayStart + rawArray.length;
+  }
+  return template;
+}
+
 function parseOpenApiDocTables(text) {
+  const mixinTemplate = parseOpenApiDocMixinReactTables(text);
+  if (Object.keys(mixinTemplate).length) return mixinTemplate;
   const requestSection = text.match(/(?:^|\n)##\s*请求参数[\s\S]*?(?=\n##\s*(?:返回参数|请求示例|返回示例|错误码)|$)/)?.[0]
     || text.match(/请求参数[\s\S]*?(?:返回参数|请求示例|返回示例|错误码|$)/)?.[0]
     || text;
@@ -3478,11 +3804,44 @@ function parseOpenApiDocJsonExample(text) {
   return {};
 }
 
+function stripOpenApiJsonComments(raw) {
+  let output = '';
+  let inString = false;
+  let escaped = false;
+  for (let i = 0; i < raw.length; i += 1) {
+    const ch = raw[i];
+    const next = raw[i + 1];
+    if (inString) {
+      output += ch;
+      if (escaped) {
+        escaped = false;
+      } else if (ch === '\\') {
+        escaped = true;
+      } else if (ch === '"') {
+        inString = false;
+      }
+      continue;
+    }
+    if (ch === '"') {
+      inString = true;
+      output += ch;
+      continue;
+    }
+    if (ch === '/' && next === '/') {
+      while (i < raw.length && raw[i] !== '\n') i += 1;
+      output += '\n';
+      continue;
+    }
+    output += ch;
+  }
+  return output;
+}
+
 function sanitizeOpenApiDocJsonExample(raw) {
   const jsonStart = raw.indexOf('{');
   if (jsonStart < 0) return raw;
-  return raw
-    .slice(jsonStart)
+  return stripOpenApiJsonComments(raw.slice(jsonStart))
+    .replace(/,(\s*[}\]])/g, '$1')
     .replace(/(^|[\s:\[,])(-?\d[\d*]*\*[\d*]*)(?=\s*[,}\]])/g, (match, prefix, value) => (
       `${prefix}${value.replace(/\*/g, '')}`
     ));
@@ -3555,7 +3914,7 @@ function extractFirstBalancedJsonObject(text) {
 }
 
 function parseOpenApiDocRequestExample(text) {
-  const section = text.match(/(?:请求示例|Sample request)[\s\S]*?(?:返回示例|Sample response|Response example|返回参数|Response parameters|错误码|Error codes|服务端 SDK|最近更新时间|$)/i);
+  const section = text.match(/(?:请求示例|输入示例|Sample request|Input example)[\s\S]*?(?:输出示例|返回示例|Sample response|Response example|返回参数|Response parameters|错误码|Error codes|服务端 SDK|最近更新时间|$)/i);
   if (!section) return {};
   const codeBlocks = section[0].match(/```(?:json)?\s*([\s\S]*?)```/gi) || [];
   let best = null;
@@ -3572,7 +3931,15 @@ function parseOpenApiDocRequestExample(text) {
       if (!keys.length) continue;
       if (keys.some(key => ['ResponseMetadata', 'Result', 'Error', 'RequestId'].includes(key))) continue;
       const apiLikeKeyCount = keys.filter(key => /^[A-Z][A-Za-z0-9_]*$/.test(key)).length;
-      const score = apiLikeKeyCount * 3 + Math.min(keys.length, 5);
+      const rootRequestScore = [
+        ['AppId', 18],
+        ['RoomId', 14],
+        ['TaskId', 10],
+        ['Config', 18],
+        ['AgentConfig', 14],
+        ['BusinessId', 5],
+      ].reduce((sum, [key, weight]) => sum + (Object.prototype.hasOwnProperty.call(parsed, key) ? weight : 0), 0);
+      const score = rootRequestScore + apiLikeKeyCount * 3 + Math.min(keys.length, 5);
       if (score > bestScore) {
         bestScore = score;
         best = parsed;
@@ -3631,7 +3998,9 @@ function inferOpenApiDocProduct(text, docUrl, requestUrl = '') {
 
   if (!service && doc) {
     const volcMatch = doc.pathname.match(/\/docs\/(\d+)\//);
-    const byteplusMatch = doc.pathname.match(/^\/[^/]+\/docs\/([^/]+)\//);
+    const byteplusMatch = doc.hostname === 'docs.byteplus.com'
+      ? doc.pathname.match(/^\/[^/]+\/docs\/([^/]+)\//)
+      : doc.pathname.match(/^\/docs\/([^/]+)\//);
     const libraryKey = volcMatch?.[1] || byteplusMatch?.[1] || '';
     service = openApiDocLibraryServiceMap[libraryKey] || '';
   }
@@ -3641,7 +4010,10 @@ function inferOpenApiDocProduct(text, docUrl, requestUrl = '') {
   let product = null;
   if (platform && productKind) {
     const candidates = openApiProducts.filter(item => item.platform === platform && item.product === productKind);
-    product = candidates.find(item => region && item.region === region) || (candidates.length === 1 ? candidates[0] : null);
+    const defaultProductId = openApiDefaultProductIds[`${platform}|${productKind}`];
+    product = candidates.find(item => region && item.region === region)
+      || candidates.find(item => item.id === defaultProductId)
+      || (candidates.length === 1 ? candidates[0] : null);
   }
   return {
     platform,
@@ -3772,6 +4144,7 @@ function applyOpenApiRequestUrl(options = {}) {
     log(`已从请求地址解析: ${action || '未识别 Action'} / ${version || '未识别 Version'}`, action && version ? 'success' : 'warn');
   }
   lastParsedOpenApiRequestUrl = getOpenApiValue('openapi-request-url');
+  updateOpenApiCredentialStatus();
   return { endpoint, action, version, query };
 }
 
@@ -3874,7 +4247,10 @@ function getOpenApiConfig() {
 
 async function signOpenApiRequest() {
   const cfg = getOpenApiConfig();
-  if (!cfg.ak || !cfg.sk) throw new Error('请先填写 AccessKeyID 和 SecretAccessKey');
+  if (!cfg.ak || !cfg.sk) {
+    updateOpenApiCredentialStatus({ attention: true });
+    throw new Error('请先填写 AccessKeyID 和 SecretAccessKey');
+  }
   if (!cfg.service) throw new Error('请填写 Service');
   if (!cfg.action || !cfg.version) throw new Error('请填写 Action 和 Version');
 
@@ -3992,7 +4368,7 @@ async function sendOpenApiRequest() {
     log(`OpenAPI 返回: HTTP ${response.status} ${response.statusText}`, response.ok ? 'success' : 'error');
   } catch (err) {
     const corsHint = String(err.message || err).includes('Failed to fetch')
-      ? `\n\n未能访问腾讯云函数代理：${openApiProxyUrl}。请确认函数 URL 可访问，并且 CORS 已开启。`
+      ? `\n\n未能访问线上转发接口：${openApiProxyUrl}。请确认接口可访问，并且 CORS 已开启。`
       : '';
     setOpenApiResult(`Error: ${err.message || err}${corsHint}`, 'error');
     if (signed) {
@@ -4028,6 +4404,285 @@ async function copyOpenApiCurl() {
 function clearOpenApiResult() {
   document.getElementById('openapi-preview').textContent = '// 还没有生成请求';
   setOpenApiResult('// 等待请求');
+}
+
+// ========== Callback Workbench ==========
+const callbackConfigStorageKey = 'video-cloud-callback-config';
+const callbackDefaultFunctionUrl = 'https://1302048544-0iyrgnpy6p.ap-hongkong.tencentscf.com';
+let callbackAutoRefreshTimer = null;
+let lastCallbackRecords = [];
+
+function getCallbackValue(id) {
+  return document.getElementById(id)?.value.trim() || '';
+}
+
+function setCallbackOutput(value, level = 'info') {
+  const el = document.getElementById('callback-output');
+  if (!el) return;
+  el.textContent = '';
+  el.style.color = level === 'error' ? 'var(--error)' : (level === 'success' ? 'var(--success)' : 'var(--text2)');
+  if (value && typeof value === 'object') {
+    el.appendChild(renderJsonTree(maskOpenApiValue(value)));
+  } else {
+    el.textContent = value || '// 等待解析';
+  }
+}
+
+function normalizeCallbackSearchText(value) {
+  return String(value ?? '')
+    .toLowerCase()
+    .replace(/["'`]/g, '')
+    .replace(/\s*:\s*/g, ':')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function renderCallbackRecordList() {
+  const el = document.getElementById('callback-output');
+  if (!el) return;
+  document.getElementById('callback-record-count')?.remove();
+  document.getElementById('callback-record-list')?.remove();
+  const searchInput = document.getElementById('callback-record-search');
+  const keyword = normalizeCallbackSearchText(searchInput.value);
+  const filteredRecords = keyword
+    ? lastCallbackRecords.filter(record => normalizeCallbackSearchText(JSON.stringify(record)).includes(keyword))
+    : lastCallbackRecords;
+  const count = document.createElement('div');
+  count.id = 'callback-record-count';
+  count.className = 'callback-record-count';
+  count.textContent = keyword ? `匹配 ${filteredRecords.length} / ${lastCallbackRecords.length} 条回调` : `共 ${lastCallbackRecords.length} 条回调`;
+  el.appendChild(count);
+
+  const list = document.createElement('div');
+  list.id = 'callback-record-list';
+  list.className = 'callback-record-list';
+  if (!filteredRecords.length) {
+    list.textContent = keyword ? '没有匹配的回调内容' : '暂无回调内容';
+    el.appendChild(list);
+    return;
+  }
+  filteredRecords.forEach((record, index) => {
+    const card = document.createElement('div');
+    card.className = 'callback-record-card';
+    const title = document.createElement('div');
+    title.className = 'callback-record-title';
+    title.append(`回调 ${index + 1}`);
+    if (record?.time) {
+      const time = document.createElement('span');
+      time.textContent = record.time;
+      title.appendChild(time);
+    }
+    const body = document.createElement('div');
+    body.className = 'callback-record-body';
+    body.appendChild(renderJsonTree(maskOpenApiValue(record?.data ?? record)));
+    const raw = document.createElement('details');
+    raw.className = 'callback-record-raw';
+    const rawSummary = document.createElement('summary');
+    rawSummary.textContent = '查看原始内容';
+    const rawPre = document.createElement('pre');
+    rawPre.textContent = JSON.stringify(maskOpenApiValue(record), null, 2);
+    raw.append(rawSummary, rawPre);
+    card.append(title, body, raw);
+    list.appendChild(card);
+  });
+  el.appendChild(list);
+}
+
+function renderCallbackRecords(records) {
+  lastCallbackRecords = Array.isArray(records) ? records : [];
+  const el = document.getElementById('callback-output');
+  if (!el) return;
+  el.textContent = '';
+  el.style.color = 'var(--text2)';
+  const search = document.createElement('div');
+  search.className = 'callback-search';
+  const searchInput = document.createElement('input');
+  searchInput.id = 'callback-record-search';
+  searchInput.value = getCallbackValue('callback-record-search');
+  searchInput.placeholder = '按关键字筛选回调内容';
+  searchInput.addEventListener('input', renderCallbackRecordList);
+  search.appendChild(searchInput);
+  el.appendChild(search);
+  renderCallbackRecordList();
+}
+
+function buildCallbackUrl() {
+  const base = getCallbackValue('callback-function-url').replace(/\/+$/, '');
+  return base || '';
+}
+
+function buildCallbackApiUrl(path = '/callbacks') {
+  const base = getCallbackValue('callback-function-url').replace(/\/+$/, '');
+  if (!base) return '';
+  const nextPath = path.startsWith('/') ? path : `/${path}`;
+  return `${base}${nextPath}`;
+}
+
+function updateCallbackUrlPreview() {
+  const preview = document.getElementById('callback-url-preview');
+  if (!preview) return;
+  preview.textContent = buildCallbackUrl() || '// 请先填写回调地址';
+}
+
+function saveCallbackConfig() {
+  localStorage.setItem(callbackConfigStorageKey, JSON.stringify({
+    functionUrl: getCallbackValue('callback-function-url'),
+  }));
+  updateCallbackUrlPreview();
+  log('回调配置已保存', 'success');
+}
+
+function loadCallbackConfig() {
+  try {
+    const config = JSON.parse(localStorage.getItem(callbackConfigStorageKey) || '{}');
+    document.getElementById('callback-function-url').value = config.functionUrl || callbackDefaultFunctionUrl;
+  } catch {
+    document.getElementById('callback-function-url').value = callbackDefaultFunctionUrl;
+  }
+  updateCallbackUrlPreview();
+}
+
+async function copyCallbackUrl() {
+  const url = buildCallbackUrl();
+  if (!url) {
+    log('请先填写回调地址', 'warn');
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(url);
+    log('回调地址已复制到剪贴板', 'success');
+  } catch (err) {
+    log(`复制回调地址失败: ${err.message || err}`, 'error');
+  }
+}
+
+async function fetchCallbackRecords(options = {}) {
+  const url = buildCallbackApiUrl('/callbacks');
+  if (!url) {
+    setCallbackOutput('请先填写回调地址。', 'error');
+    return;
+  }
+  if (!options.silent) setCallbackOutput('正在读取最近回调...', 'info');
+  try {
+    const response = await fetch(url, { method: 'GET' });
+    const text = await response.text();
+    let data;
+    try { data = JSON.parse(text); } catch { data = text; }
+    const records = Array.isArray(data?.data) ? data.data : (Array.isArray(data) ? data : []);
+    if (response.ok) {
+      renderCallbackRecords(records);
+    } else {
+      setCallbackOutput(data, 'error');
+    }
+    log(`最近回调读取完成: HTTP ${response.status}`, response.ok ? 'success' : 'warn');
+  } catch (err) {
+    setCallbackOutput(`读取失败: ${err.message || err}\n\n页面需要回调接收服务提供 GET /callbacks，并允许跨域。`, 'error');
+    log(`读取最近回调失败: ${err.message || err}`, 'error');
+  }
+}
+
+function toggleCallbackAutoRefresh() {
+  const button = document.getElementById('btn-callback-auto-refresh');
+  if (callbackAutoRefreshTimer) {
+    window.clearInterval(callbackAutoRefreshTimer);
+    callbackAutoRefreshTimer = null;
+    if (button) button.textContent = '自动刷新';
+    log('回调自动刷新已关闭', 'info');
+    return;
+  }
+  fetchCallbackRecords({ silent: true });
+  callbackAutoRefreshTimer = window.setInterval(() => fetchCallbackRecords({ silent: true }), 5000);
+  if (button) button.textContent = '停止刷新';
+  log('回调自动刷新已开启，每 5 秒刷新一次', 'success');
+}
+
+function extractFirstBalancedJsonLike(text) {
+  const start = text.search(/[\[{]/);
+  if (start < 0) return '';
+  const stack = [];
+  let quote = '';
+  let escaped = false;
+  for (let i = start; i < text.length; i += 1) {
+    const char = text[i];
+    if (quote) {
+      if (escaped) {
+        escaped = false;
+      } else if (char === '\\') {
+        escaped = true;
+      } else if (char === quote) {
+        quote = '';
+      }
+      continue;
+    }
+    if (char === '"' || char === "'") {
+      quote = char;
+      continue;
+    }
+    if (char === '{' || char === '[') {
+      stack.push(char);
+      continue;
+    }
+    if (char === '}' || char === ']') {
+      const open = stack.pop();
+      if ((open === '{' && char !== '}') || (open === '[' && char !== ']')) return '';
+      if (!stack.length) return text.slice(start, i + 1);
+    }
+  }
+  return '';
+}
+
+function parseLooseCallbackObject(text) {
+  const candidates = [];
+  const trimmed = text.trim();
+  candidates.push(trimmed);
+  const paramIndex = trimmed.search(/参数[：:]/);
+  if (paramIndex >= 0) {
+    const paramText = trimmed.slice(paramIndex).replace(/^参数[：:]\s*/, '');
+    const balanced = extractFirstBalancedJsonLike(paramText);
+    if (balanced) candidates.unshift(balanced);
+    candidates.unshift(paramText.trim());
+  }
+  const jsonBlockMatch = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (jsonBlockMatch) candidates.unshift(jsonBlockMatch[1].trim());
+  for (const candidate of candidates) {
+    if (!candidate) continue;
+    try {
+      return JSON.parse(candidate);
+    } catch {
+      const normalized = candidate
+        .replace(/'/g, '"')
+        .replace(/\bNone\b/g, 'null')
+        .replace(/\bTrue\b/g, 'true')
+        .replace(/\bFalse\b/g, 'false');
+      try {
+        return JSON.parse(normalized);
+      } catch {
+        // 继续尝试下一个候选。
+      }
+    }
+  }
+  return null;
+}
+
+function parseCallbackJson() {
+  const raw = getCallbackValue('callback-log-input');
+  if (!raw) {
+    setCallbackOutput('请先粘贴回调 JSON。', 'error');
+    return;
+  }
+  const callbackParams = parseLooseCallbackObject(raw);
+  if (!callbackParams) {
+    setCallbackOutput('JSON 解析失败，请检查格式是否完整。', 'error');
+    log('回调 JSON 解析失败', 'error');
+    return;
+  }
+  setCallbackOutput(callbackParams, 'success');
+  log('回调 JSON 已解析', 'success');
+}
+
+function clearCallbackLog() {
+  document.getElementById('callback-log-input').value = '';
+  setCallbackOutput('// 等待解析');
 }
 
 function saveOpenApiDraft() {
@@ -4077,6 +4732,7 @@ document.getElementById('scene-home').addEventListener('click', () => setScene('
 document.getElementById('scene-cloud-phone').addEventListener('click', () => setScene('cloud-phone'));
 document.getElementById('scene-enterprise-live').addEventListener('click', () => setScene('enterprise-live'));
 document.getElementById('scene-openapi').addEventListener('click', () => setScene('openapi'));
+document.getElementById('scene-callback').addEventListener('click', () => setScene('callback'));
 document.querySelectorAll('[data-target-scene]').forEach(button => {
   button.addEventListener('click', () => setScene(button.dataset.targetScene));
 });
@@ -4099,21 +4755,27 @@ document.getElementById('btn-live-mount').addEventListener('click', () => {
 document.getElementById('btn-live-destroy').addEventListener('click', () => destroyEnterpriseLiveRoom());
 document.getElementById('openapi-result-view-tree').addEventListener('click', () => setOpenApiResultMode('tree'));
 document.getElementById('openapi-result-view-text').addEventListener('click', () => setOpenApiResultMode('text'));
+['callback-function-url'].forEach(id => {
+  document.getElementById(id).addEventListener('input', updateCallbackUrlPreview);
+});
 document.getElementById('openapi-platform').addEventListener('change', () => {
   updateOpenApiProductKindOptions();
-  restoreOpenApiSessionCredentials();
+  updateOpenApiCredentialStatus();
 });
 document.getElementById('openapi-product-kind').addEventListener('change', () => {
   updateOpenApiRegionOptions();
-  restoreOpenApiSessionCredentials();
+  updateOpenApiCredentialStatus();
 });
 document.getElementById('openapi-product').addEventListener('change', () => {
   const product = applyOpenApiProduct();
-  restoreOpenApiSessionCredentials();
+  updateOpenApiCredentialStatus();
   if (product) log(`已选择产品: ${getOpenApiProductLabel(product)} (${product.service}/${product.region})`, 'success');
 });
 document.getElementById('openapi-credential-profile').addEventListener('change', () => {
   applyOpenApiCredentialProfile();
+});
+['openapi-ak', 'openapi-sk', 'openapi-credential-name'].forEach(id => {
+  document.getElementById(id).addEventListener('input', updateOpenApiCredentialStatus);
 });
 document.getElementById('btn-openapi-save-credentials').addEventListener('click', () => {
   saveOpenApiSessionCredentials({ notify: true });
@@ -4605,7 +5267,9 @@ buildUI();
 buildOpenApiProductSelect();
 refreshOpenApiCredentialProfiles();
 renderOpenApiHistory();
+loadCallbackConfig();
 applyOpenApiRequestUrl({ log: false });
+updateOpenApiCredentialStatus();
 refreshPresetList();
 updateLiveControls();
 applyTheme();
