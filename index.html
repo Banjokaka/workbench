@@ -2839,6 +2839,23 @@ function formatOpenApiHistoryDetail(value) {
   return JSON.stringify(value, null, 2);
 }
 
+function formatOpenApiHistoryTarget(record) {
+  const endpoint = record.endpoint || record.requestUrl || '';
+  if (!endpoint) return '';
+  try {
+    const url = new URL(endpoint);
+    const action = record.action || url.searchParams.get('Action') || url.searchParams.get('action');
+    const version = record.version || url.searchParams.get('Version') || url.searchParams.get('version');
+    const base = `${url.origin}${url.pathname || '/'}`;
+    const parts = [];
+    if (action) parts.push(`Action=${action}`);
+    if (version) parts.push(`Version=${version}`);
+    return parts.length ? `${base}?${parts.join('&')}` : base;
+  } catch {
+    return [record.action, record.version].filter(Boolean).join(' / ') || endpoint;
+  }
+}
+
 function getOpenApiHistoryBodyText(record) {
   if (record.requestParams !== undefined) {
     return typeof record.requestParams === 'string'
@@ -2943,7 +2960,7 @@ function renderOpenApiHistory() {
     meta.textContent = [
       formatOpenApiHistoryTime(record.createdAt),
       record.productLabel || record.service,
-      record.requestUrl || record.endpoint,
+      formatOpenApiHistoryTarget(record),
     ].filter(Boolean).join(' · ');
     content.append(title, meta);
 
