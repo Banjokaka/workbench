@@ -3954,6 +3954,26 @@ function parseOpenApiDocRequestExample(text) {
   return best;
 }
 
+
+function parseOpenApiDocRequestQueryExample(text) {
+  const section = text.match(/(?:请求示例|输入示例|Sample request|Input example)[\s\S]*?(?:输出示例|返回示例|Sample response|Response example|返回参数|Response parameters|错误码|Error codes|服务端 SDK|最近更新时间|$)/i);
+  if (!section) return {};
+  const urls = section[0].match(/https:\/\/[A-Za-z0-9.-]*(?:volcengineapi|byteplusapi)\.com[^\s"'<>)]*/gi) || [];
+  const template = {};
+  urls.forEach(rawUrl => {
+    try {
+      const url = new URL(rawUrl.replace(/[*`]+$/g, ''));
+      url.searchParams.forEach((value, key) => {
+        if (['Action', 'Version'].includes(key)) return;
+        setOpenApiTemplateValue(template, key, value);
+      });
+    } catch {
+      // 继续尝试下一个 URL。
+    }
+  });
+  return template;
+}
+
 function parseOpenApiDocRequestMeta(text) {
   const section = text.match(/(?:请求示例|Sample request)[\s\S]*?(?:返回示例|Sample response|Response example|返回参数|Response parameters|错误码|Error codes|服务端 SDK|最近更新时间|$)/i)?.[0] || text;
   const requestLine = section.match(/\b(GET|POST)\s+(https:\/\/[A-Za-z0-9.-]*(?:volcengineapi|byteplusapi)\.com[^\s"'<>)]*)/i);
@@ -4036,9 +4056,10 @@ function parseOpenApiDoc(text, docUrl) {
   const template = parseOpenApiDocTables(text);
   const example = parseOpenApiDocJsonExample(text);
   const requestExample = parseOpenApiDocRequestExample(text);
+  const queryExample = parseOpenApiDocRequestQueryExample(text);
   const mergedTemplate = Object.keys(requestExample).length
     ? requestExample
-    : (Object.keys(example).length ? example : template);
+    : (Object.keys(example).length ? example : (Object.keys(queryExample).length ? queryExample : template));
   const product = inferOpenApiDocProduct(text, docUrl, endpointUrl);
   return {
     docUrl,
