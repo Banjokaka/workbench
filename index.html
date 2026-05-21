@@ -3084,15 +3084,27 @@ function bindVodPlayerEvents() {
   ['play', 'pause', 'ended', 'error', 'waiting', 'playing', 'loadedmetadata', 'timeupdate', 'firstplay'].forEach(eventName => {
     try {
       vodPlayerInstance.on(eventName, (...args) => {
-        const brief = eventName === 'timeupdate' ? '' : `: ${args.map(arg => {
-          try { return JSON.stringify(arg); } catch { return String(arg); }
-        }).join(', ')}`;
+        if (eventName === 'timeupdate') return;
+        const brief = args.length ? `: ${formatVodPlayerEventArgs(args)}` : '';
         log(`[点播播放器事件] ${eventName}${brief}`, eventName === 'error' ? 'error' : 'event');
       });
     } catch {
       // 不同版本事件名可能有差异，忽略不可绑定的事件。
     }
   });
+}
+
+function formatVodPlayerEventArgs(args) {
+  return args.map(arg => {
+    if (arg instanceof Event) {
+      return safeVodUploadStringify({
+        type: arg.type,
+        target: arg.target?.tagName || arg.target?.nodeName,
+        currentTarget: arg.currentTarget?.tagName || arg.currentTarget?.nodeName,
+      });
+    }
+    return safeVodUploadStringify(arg);
+  }).join(', ');
 }
 
 async function createVodPlayer() {
