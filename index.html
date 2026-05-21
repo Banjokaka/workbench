@@ -2232,6 +2232,7 @@ const requiredInitFields = [
 // ========== Log System ==========
 function log(msg, level = 'info') {
   if (!logLevels[level]) return;
+  const text = normalizeLogMessage(msg);
   const time = new Date().toLocaleTimeString('zh-CN', { hour12: false });
   const el = document.getElementById('log-output');
   const line = document.createElement('div');
@@ -2241,10 +2242,17 @@ function log(msg, level = 'info') {
   timeEl.textContent = time;
   const msgEl = document.createElement('span');
   msgEl.className = 'log-message';
-  msgEl.textContent = String(msg);
+  msgEl.textContent = text;
   line.append(timeEl, msgEl);
   el.appendChild(line);
   el.scrollTop = el.scrollHeight;
+}
+
+function normalizeLogMessage(msg) {
+  const text = String(msg);
+  const vodEventMatch = text.match(/^(\[点播播放器事件\]\s(?:play|playing|pause|waiting|loadedmetadata|firstplay|ended)):/);
+  if (vodEventMatch) return vodEventMatch[1];
+  return text.replace(/\s*:\s*\[object Object\]/g, '');
 }
 
 function setResult(resultId, value, level = 'success') {
