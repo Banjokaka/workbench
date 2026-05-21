@@ -1891,7 +1891,7 @@
             </div>
             <div class="full">
               <label>License JSON</label>
-              <textarea id="vod-player-license-json" placeholder='{ "license": { "sign": "", "content": "", "mainUrl": "" } }'></textarea>
+              <textarea id="vod-player-license-json" placeholder='{ "Signature": "", "Content": "", "MainURL": "", "BackupURL": "" }'></textarea>
             </div>
             <div>
               <label>播放模式</label>
@@ -1932,7 +1932,7 @@
               <textarea id="vod-player-extra-json" placeholder='{ "width": "100%", "height": 430 }'></textarea>
             </div>
           </div>
-          <div class="openapi-field-note">本地 `localhost` 和 `127.0.0.1` 默认可用于播放器 License 调试；DirectUrl 模式播放非 MP4 或加密视频时，视频资源需要支持 CORS。</div>
+          <div class="openapi-field-note">播放器 License 会校验页面来源，请用 `http://127.0.0.1:4173/` 或线上域名打开，`file://` 方式容易被判定为无效；DirectUrl 模式播放非 MP4 或加密视频时，视频资源需要支持 CORS。</div>
           <div class="openapi-actions">
             <button class="primary" type="button" onclick="loadVodPlayerSDK()">加载 SDK</button>
             <button type="button" onclick="createVodPlayer()">创建播放器</button>
@@ -3010,13 +3010,36 @@ function applyVodPlayerLicenseConfig() {
   const licenseUrl = document.getElementById('vod-player-license-url').value.trim();
   const licenseJson = document.getElementById('vod-player-license-json').value.trim();
   if (!licenseUrl && !licenseJson) return;
+  if (location.protocol === 'file:') {
+    log('当前是 file:// 打开页面，播放器 License 可能无法通过域名校验；请改用 http://127.0.0.1:4173/ 或线上地址测试', 'warn');
+  }
   try {
-    const config = licenseJson ? safeJsonParse(licenseJson, 'License JSON') : { license: licenseUrl };
+    const config = normalizeVodPlayerLicenseConfig(licenseJson ? safeJsonParse(licenseJson, 'License JSON') : licenseUrl);
     vodPlayerSDK.setLicenseConfig(config);
     log('VePlayer License 配置已应用', 'success');
   } catch (err) {
     throw new Error(`License 配置失败: ${err.message || err}`);
   }
+}
+
+function normalizeVodPlayerLicenseConfig(input) {
+  if (typeof input === 'string') {
+    return { license: input };
+  }
+  const raw = input?.license || input || {};
+  const normalized = {
+    sign: raw.sign || raw.Signature || raw.signature,
+    content: raw.content || raw.Content,
+    mainUrl: raw.mainUrl || raw.MainURL || raw.mainURL || raw.url,
+    backupUrl: raw.backupUrl || raw.BackupURL || raw.backupURL,
+  };
+  Object.keys(normalized).forEach(key => {
+    if (!normalized[key]) delete normalized[key];
+  });
+  if (!normalized.mainUrl && !normalized.content && !normalized.sign) {
+    return input;
+  }
+  return { license: normalized };
 }
 
 function getVodPlayerConfig() {
@@ -3041,6 +3064,9 @@ function getVodPlayerConfig() {
     if (token) config.playAuthToken = token;
   } else {
     if (!url) throw new Error('DirectUrl 模式需要填写视频 URL');
+    if (location.protocol === 'https:' && url.startsWith('http://')) {
+      log('当前页面是 HTTPS，但视频 URL 是 HTTP，浏览器可能会拦截混合内容；建议换成 HTTPS 视频地址', 'warn');
+    }
     config.url = url;
   }
   if (lineAppId || lineUserId) {
