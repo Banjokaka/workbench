@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>火山引擎视频云工作台</title>
+<title>火山引擎技术交付工作台</title>
 <style>
   :root {
     --bg: #1a1a2e;
@@ -244,22 +244,58 @@
   body[data-scene="home"] .live-only,
   body[data-scene="home"] .openapi-only,
   body[data-scene="home"] .callback-only,
+  body[data-scene="home"] .rtc-only,
+  body[data-scene="home"] .vod-player-only,
+  body[data-scene="home"] .vod-upload-only,
   body[data-scene="cloud-phone"] .live-only,
   body[data-scene="cloud-phone"] .openapi-only,
   body[data-scene="cloud-phone"] .callback-only,
+  body[data-scene="cloud-phone"] .rtc-only,
+  body[data-scene="cloud-phone"] .vod-player-only,
+  body[data-scene="cloud-phone"] .vod-upload-only,
   body[data-scene="cloud-phone"] .home-only,
   body[data-scene="enterprise-live"] .cloud-only,
   body[data-scene="enterprise-live"] .openapi-only,
   body[data-scene="enterprise-live"] .callback-only,
+  body[data-scene="enterprise-live"] .rtc-only,
+  body[data-scene="enterprise-live"] .vod-player-only,
+  body[data-scene="enterprise-live"] .vod-upload-only,
   body[data-scene="enterprise-live"] .home-only,
   body[data-scene="openapi"] .cloud-only,
   body[data-scene="openapi"] .live-only,
   body[data-scene="openapi"] .callback-only,
+  body[data-scene="openapi"] .rtc-only,
+  body[data-scene="openapi"] .vod-player-only,
+  body[data-scene="openapi"] .vod-upload-only,
   body[data-scene="openapi"] .home-only,
   body[data-scene="callback"] .cloud-only,
   body[data-scene="callback"] .live-only,
   body[data-scene="callback"] .openapi-only,
-  body[data-scene="callback"] .home-only { display: none !important; }
+  body[data-scene="callback"] .rtc-only,
+  body[data-scene="callback"] .vod-player-only,
+  body[data-scene="callback"] .vod-upload-only,
+  body[data-scene="callback"] .home-only,
+  body[data-scene="rtc-web"] .cloud-only,
+  body[data-scene="rtc-web"] .live-only,
+  body[data-scene="rtc-web"] .openapi-only,
+  body[data-scene="rtc-web"] .callback-only,
+  body[data-scene="rtc-web"] .vod-player-only,
+  body[data-scene="rtc-web"] .vod-upload-only,
+  body[data-scene="rtc-web"] .home-only,
+  body[data-scene="vod-player"] .cloud-only,
+  body[data-scene="vod-player"] .live-only,
+  body[data-scene="vod-player"] .openapi-only,
+  body[data-scene="vod-player"] .callback-only,
+  body[data-scene="vod-player"] .rtc-only,
+  body[data-scene="vod-player"] .vod-upload-only,
+  body[data-scene="vod-player"] .home-only,
+  body[data-scene="vod-upload"] .cloud-only,
+  body[data-scene="vod-upload"] .live-only,
+  body[data-scene="vod-upload"] .openapi-only,
+  body[data-scene="vod-upload"] .callback-only,
+  body[data-scene="vod-upload"] .rtc-only,
+  body[data-scene="vod-upload"] .vod-player-only,
+  body[data-scene="vod-upload"] .home-only { display: none !important; }
   body[data-scene="home"] #sidebar,
   body[data-scene="home"] #api-panel,
   body[data-scene="home"] #live-api-panel,
@@ -267,11 +303,23 @@
   body[data-scene="home"] #state-badge,
   body[data-scene="home"] #version-display,
   body[data-scene="home"] .workspace-only,
+  body[data-scene="rtc-web"] .workspace-only,
+  body[data-scene="vod-player"] .workspace-only,
+  body[data-scene="vod-upload"] .workspace-only,
   body[data-scene="callback"] #sidebar,
   body[data-scene="callback"] #api-panel,
   body[data-scene="callback"] #live-api-panel,
   body[data-scene="callback"] #state-badge,
-  body[data-scene="callback"] #version-display { display: none !important; }
+  body[data-scene="callback"] #version-display,
+  body[data-scene="rtc-web"] #sidebar,
+  body[data-scene="rtc-web"] #api-panel,
+  body[data-scene="rtc-web"] #live-api-panel,
+  body[data-scene="vod-player"] #sidebar,
+  body[data-scene="vod-player"] #api-panel,
+  body[data-scene="vod-player"] #live-api-panel,
+  body[data-scene="vod-upload"] #sidebar,
+  body[data-scene="vod-upload"] #api-panel,
+  body[data-scene="vod-upload"] #live-api-panel { display: none !important; }
   body[data-scene="openapi"] #log-panel { height: 34px; }
   body[data-scene="openapi"] #log-output { display: none; }
   body[data-scene="openapi"].log-expanded #log-panel { height: 180px; }
@@ -280,6 +328,18 @@
   body[data-scene="callback"] #log-output { display: none; }
   body[data-scene="callback"].log-expanded #log-panel { height: 180px; }
   body[data-scene="callback"].log-expanded #log-output { display: block; }
+  body[data-scene="rtc-web"] #log-panel { height: 34px; }
+  body[data-scene="rtc-web"] #log-output { display: none; }
+  body[data-scene="rtc-web"].log-expanded #log-panel { height: 180px; }
+  body[data-scene="rtc-web"].log-expanded #log-output { display: block; }
+  body[data-scene="vod-player"] #log-panel { height: 34px; }
+  body[data-scene="vod-player"] #log-output { display: none; }
+  body[data-scene="vod-player"].log-expanded #log-panel { height: 180px; }
+  body[data-scene="vod-player"].log-expanded #log-output { display: block; }
+  body[data-scene="vod-upload"] #log-panel { height: 34px; }
+  body[data-scene="vod-upload"] #log-output { display: none; }
+  body[data-scene="vod-upload"].log-expanded #log-panel { height: 180px; }
+  body[data-scene="vod-upload"].log-expanded #log-output { display: block; }
 
   /* Layout */
   #main {
@@ -373,8 +433,15 @@
     padding: 24px;
   }
   #home-workbench {
-    width: min(1080px, 100%);
+    width: min(1320px, 100%);
     margin: 0 auto;
+  }
+  .home-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
   }
   .home-kicker {
     color: var(--accent);
@@ -385,27 +452,27 @@
     margin-bottom: 8px;
   }
   .home-title {
-    font-size: 28px;
+    font-size: 24px;
     line-height: 1.2;
     font-weight: 700;
-    margin-bottom: 10px;
+    margin-bottom: 0;
   }
   .home-subtitle {
     color: var(--text2);
-    font-size: var(--fs-body);
+    font-size: var(--fs-control);
     line-height: 1.6;
-    max-width: 720px;
-    margin-bottom: 24px;
+    max-width: 520px;
+    margin: 0;
   }
   .home-entry-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 14px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
   }
   .home-entry-card {
     text-align: left;
-    min-height: 210px;
-    padding: 18px;
+    min-height: 112px;
+    padding: 14px;
     border-radius: var(--radius);
     border: 1px solid var(--border);
     background: var(--surface);
@@ -413,16 +480,37 @@
     cursor: pointer;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+    transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
+  }
+  .home-entry-card::after {
+    content: "";
+    position: absolute;
+    inset: -40% -80%;
+    background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.16) 48%, transparent 62%);
+    transform: translateX(-55%) rotate(8deg);
+    opacity: 0;
+    pointer-events: none;
   }
   .home-entry-card:hover {
     border-color: var(--accent);
-    transform: translateY(-1px);
+    transform: translateY(-4px) scale(1.015);
+    box-shadow: 0 14px 34px rgba(0,0,0,.18), 0 0 0 1px color-mix(in srgb, var(--accent) 28%, transparent);
+    background: linear-gradient(145deg, var(--surface), var(--surface2));
+  }
+  .home-entry-card:hover::after {
+    opacity: 1;
+    animation: home-card-shine .7s ease;
+  }
+  .home-entry-card:hover .home-entry-icon {
+    animation: home-icon-pop .46s ease;
   }
   .home-entry-icon {
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    border-radius: 7px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -430,15 +518,25 @@
     color: var(--accent);
     font-weight: 700;
     font-family: var(--mono);
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  @keyframes home-card-shine {
+    from { transform: translateX(-65%) rotate(8deg); }
+    to { transform: translateX(65%) rotate(8deg); }
+  }
+  @keyframes home-icon-pop {
+    0% { transform: translateY(0) scale(1); }
+    45% { transform: translateY(-4px) scale(1.12); }
+    100% { transform: translateY(0) scale(1); }
   }
   .home-entry-card h2 {
     font-size: var(--fs-section);
-    margin: 4px 0 0;
+    margin: 2px 0 0;
   }
   .home-entry-card p {
     color: var(--text2);
     font-size: var(--fs-control);
-    line-height: 1.55;
+    line-height: 1.45;
     flex: 1;
   }
   .home-entry-card span:last-child {
@@ -447,25 +545,28 @@
     font-weight: 700;
   }
   .home-tool-section {
-    margin-top: 24px;
+    margin-top: 18px;
   }
   .home-section-title {
     color: var(--text);
     font-size: var(--fs-section);
     font-weight: 700;
-    margin-bottom: 10px;
+    margin: 0 0 10px;
   }
   .home-tool-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
+    gap: 12px;
   }
   .home-tool-card {
-    min-height: 150px;
+    min-height: 98px;
     text-decoration: none;
   }
   body[data-scene="openapi"] #center-panel,
-  body[data-scene="callback"] #center-panel {
+  body[data-scene="callback"] #center-panel,
+  body[data-scene="rtc-web"] #center-panel,
+  body[data-scene="vod-player"] #center-panel,
+  body[data-scene="vod-upload"] #center-panel {
     justify-content: flex-start;
     overflow-y: auto;
     padding: 12px 14px 24px;
@@ -510,6 +611,163 @@
   #callback-workbench {
     width: min(1280px, 100%);
     margin: 0 auto;
+  }
+  #rtc-web-workbench {
+    width: min(1380px, 100%);
+    margin: 0 auto;
+  }
+  #vod-player-workbench {
+    width: min(1380px, 100%);
+    margin: 0 auto;
+  }
+  #vod-upload-workbench {
+    width: min(1380px, 100%);
+    margin: 0 auto;
+  }
+  .rtc-layout {
+    display: grid;
+    grid-template-columns: minmax(420px, .78fr) minmax(520px, 1fr);
+    gap: 12px;
+    align-items: start;
+  }
+  .vod-player-layout {
+    display: grid;
+    grid-template-columns: minmax(430px, .78fr) minmax(560px, 1fr);
+    gap: 12px;
+    align-items: start;
+  }
+  .vod-upload-layout {
+    display: grid;
+    grid-template-columns: minmax(430px, .78fr) minmax(520px, 1fr);
+    gap: 12px;
+    align-items: start;
+  }
+  .rtc-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .vod-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .upload-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .rtc-form-grid .full {
+    grid-column: 1 / -1;
+  }
+  .vod-form-grid .full {
+    grid-column: 1 / -1;
+  }
+  .upload-form-grid .full {
+    grid-column: 1 / -1;
+  }
+  .rtc-video-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .rtc-video-box {
+    min-height: 260px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+  }
+  .rtc-video-box h4 {
+    position: absolute;
+    z-index: 2;
+    top: 8px;
+    left: 8px;
+    margin: 0;
+    padding: 3px 6px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, .46);
+    color: #fff;
+    font-size: var(--fs-caption);
+  }
+  .rtc-video-box > div {
+    width: 100%;
+    height: 100%;
+    min-height: 260px;
+  }
+  .rtc-status-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .rtc-status-item {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--surface);
+    padding: 8px;
+  }
+  .rtc-status-item span {
+    display: block;
+    color: var(--text2);
+    font-size: var(--fs-caption);
+  }
+  .rtc-status-item strong {
+    display: block;
+    margin-top: 4px;
+    color: var(--accent);
+    font-size: var(--fs-control);
+  }
+  .vod-player-stage {
+    min-height: 430px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: #05070d;
+    overflow: hidden;
+    position: relative;
+  }
+  #vod-player-container {
+    width: 100%;
+    height: 430px;
+    min-height: 430px;
+  }
+  .vod-player-empty {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: rgba(255,255,255,.72);
+    font-size: var(--fs-control);
+    pointer-events: none;
+  }
+  .upload-drop-zone {
+    border: 1px dashed var(--border);
+    border-radius: 4px;
+    background: var(--bg);
+    padding: 14px;
+  }
+  .upload-drop-zone input {
+    width: 100%;
+  }
+  .upload-file-info {
+    margin-top: 8px;
+    color: var(--text2);
+    font-size: var(--fs-caption);
+    word-break: break-all;
+  }
+  .upload-progress {
+    height: 12px;
+    border-radius: 999px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .upload-progress-bar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    transition: width .18s ease;
   }
   .callback-layout {
     display: grid;
@@ -1192,7 +1450,7 @@
     #live-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     #bytelive-layout { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) 180px; }
     #bytelive-menu { border-left: 0; border-top: 1px solid var(--border); }
-    .openapi-hero, .openapi-grid, .openapi-workbench-layout, .callback-layout, .home-entry-grid, .home-tool-grid, .openapi-history-detail-grid { grid-template-columns: 1fr; }
+    .openapi-hero, .openapi-grid, .openapi-workbench-layout, .callback-layout, .rtc-layout, .rtc-video-grid, .vod-player-layout, .vod-upload-layout, .home-entry-grid, .home-tool-grid, .openapi-history-detail-grid { grid-template-columns: 1fr; }
     .openapi-response-column { position: static; }
   }
 </style>
@@ -1201,11 +1459,14 @@
 
 <!-- Top Bar -->
 <div id="topbar">
-  <h1>火山引擎视频云工作台</h1>
+  <h1>火山引擎技术交付工作台</h1>
   <div class="scene-switch">
     <button id="scene-home" class="active" type="button">首页</button>
     <button id="scene-cloud-phone" type="button">云手机</button>
     <button id="scene-enterprise-live" type="button">企业直播</button>
+    <button id="scene-rtc-web" type="button">RTC Web</button>
+    <button id="scene-vod-player" type="button">点播播放器</button>
+    <button id="scene-vod-upload" type="button">点播上传</button>
     <button id="scene-openapi" type="button">OpenAPI</button>
     <button id="scene-callback" type="button">回调调试</button>
   </div>
@@ -1458,31 +1719,47 @@
   <!-- Center: Player -->
   <div id="center-panel">
     <div id="home-workbench" class="home-only">
-      <div class="home-kicker">Workspace</div>
-      <div class="home-title">选择要调试的能力</div>
+      <div class="home-header">
+        <div>
+          <div class="home-kicker">Workspace</div>
+          <div class="home-title">选择要调试的能力</div>
+        </div>
+      </div>
+      <div class="home-section-title">业务调试</div>
       <div class="home-entry-grid">
         <button class="home-entry-card" type="button" data-target-scene="cloud-phone">
           <span class="home-entry-icon">CP</span>
           <h2>云手机</h2>
-          <p>加载云手机 H5 SDK，填写启动参数，调试连接、触控、文件、音视频和常用 SDK 方法。</p>
           <span>进入云手机</span>
         </button>
         <button class="home-entry-card" type="button" data-target-scene="enterprise-live">
           <span class="home-entry-icon">EL</span>
           <h2>企业直播</h2>
-          <p>加载 Web 观播 SDK，进入直播间或播放器模块，调试活动、菜单、评论和播放器能力。</p>
           <span>进入企业直播</span>
         </button>
         <button class="home-entry-card" type="button" data-target-scene="openapi">
           <span class="home-entry-icon">API</span>
           <h2>OpenAPI</h2>
-          <p>选择产品和区域，保存临时 AK/SK，粘贴请求地址并发送签名后的 OpenAPI 请求。</p>
           <span>进入 OpenAPI</span>
+        </button>
+        <button class="home-entry-card" type="button" data-target-scene="rtc-web">
+          <span class="home-entry-icon">RTC</span>
+          <h2>RTC Web</h2>
+          <span>进入 RTC Web</span>
+        </button>
+        <button class="home-entry-card" type="button" data-target-scene="vod-player">
+          <span class="home-entry-icon">VOD</span>
+          <h2>点播播放器</h2>
+          <span>进入点播播放器</span>
+        </button>
+        <button class="home-entry-card" type="button" data-target-scene="vod-upload">
+          <span class="home-entry-icon">UP</span>
+          <h2>点播上传</h2>
+          <span>进入点播上传</span>
         </button>
         <button class="home-entry-card" type="button" data-target-scene="callback">
           <span class="home-entry-icon">CB</span>
           <h2>回调调试</h2>
-          <p>维护回调接收地址，解析回调 JSON，用层级视图快速确认事件内容。</p>
           <span>进入回调调试</span>
         </button>
       </div>
@@ -1492,15 +1769,252 @@
           <a class="home-entry-card home-tool-card" href="https://deliverytoolonepager.gf.bytedance.net/" target="_blank" rel="noopener noreferrer">
             <span class="home-entry-icon">DT</span>
             <h2>交付常用站点</h2>
-            <p>打开交付同学常用的一页式工具站点，集中查看日常交付相关信息和入口。</p>
             <span>打开站点</span>
           </a>
           <a class="home-entry-card home-tool-card" href="https://videocompare.gf.bytedance.net/" target="_blank" rel="noopener noreferrer">
             <span class="home-entry-icon">VC</span>
             <h2>多视频画质同步对比</h2>
-            <p>打开多视频同步对比工具，用于并排检查不同视频源、码率或转码结果的画质差异。</p>
             <span>打开站点</span>
           </a>
+        </div>
+      </div>
+    </div>
+    <div id="vod-upload-workbench" class="vod-upload-only">
+      <div class="vod-upload-layout">
+        <div class="openapi-box openapi-section">
+          <h3>点播上传参数</h3>
+          <div class="upload-form-grid">
+            <div class="full">
+              <label>SDK 地址</label>
+              <input id="vod-upload-sdk-url" value="https://unpkg.com/tt-uploader@1.6.1/dist/index.js">
+            </div>
+            <div>
+              <label>AppId</label>
+              <input id="vod-upload-app-id" value="" placeholder="点播应用 AppId">
+            </div>
+            <div>
+              <label>UserId</label>
+              <input id="vod-upload-user-id" value="debug-user-001" placeholder="用户唯一标识，建议 ASCII">
+            </div>
+            <div>
+              <label>SpaceName</label>
+              <input id="vod-upload-space-name" value="" placeholder="点播空间名称">
+            </div>
+            <div>
+              <label>Region</label>
+              <select id="vod-upload-region">
+                <option value="cn-north-1">华北 cn-north-1</option>
+                <option value="ap-southeast-1">亚太东南 ap-southeast-1</option>
+              </select>
+            </div>
+            <div>
+              <label>文件类型</label>
+              <select id="vod-upload-file-type">
+                <option value="video">video（音视频）</option>
+                <option value="image">image（图片）</option>
+                <option value="object">object（普通文件）</option>
+                <option value="media">media（素材）</option>
+              </select>
+            </div>
+            <div>
+              <label>并行上传数量</label>
+              <input id="vod-upload-parallel" type="number" value="1" min="1" max="10">
+            </div>
+            <div class="full">
+              <label>临时上传 Token</label>
+              <textarea id="vod-upload-token" placeholder='粘贴服务端签发的临时上传 Token；支持字符串或 JSON'></textarea>
+            </div>
+            <div>
+              <label>AccessKeyID（用于生成 Token）</label>
+              <input id="vod-upload-token-ak" class="secret-text" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore placeholder="用于本页临时签发">
+            </div>
+            <div>
+              <label>SecretAccessKey（用于生成 Token）</label>
+              <input id="vod-upload-token-sk" class="secret-text" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore placeholder="仅保存在当前页面">
+            </div>
+            <div>
+              <label>Token 有效期（分钟）</label>
+              <input id="vod-upload-token-expire" type="number" value="60" min="1" max="1440">
+            </div>
+            <div>
+              <label>Token 状态</label>
+              <input id="vod-upload-token-status" value="未生成" readonly>
+            </div>
+          </div>
+          <div class="openapi-field-note">上传前需要临时上传 Token。内部调试可在本页生成；线上客户场景仍建议由服务端签发后下发给浏览器。</div>
+          <div class="openapi-actions">
+            <button type="button" onclick="generateVodUploadToken()">生成上传 Token</button>
+            <button class="primary" type="button" onclick="loadVodUploadSDK()">加载 SDK</button>
+            <button type="button" onclick="createVodUploader()">创建上传实例</button>
+            <button type="button" onclick="addVodUploadFile()">添加文件</button>
+            <button type="button" onclick="startVodUpload()">开始上传</button>
+            <button type="button" onclick="cancelVodUpload()">取消上传</button>
+            <button type="button" onclick="resetVodUploader()">重置</button>
+          </div>
+        </div>
+        <div class="openapi-box openapi-section">
+          <h3>上传状态</h3>
+          <div class="rtc-status-list">
+            <div class="rtc-status-item"><span>SDK</span><strong id="vod-upload-status-sdk">未加载</strong></div>
+            <div class="rtc-status-item"><span>Uploader</span><strong id="vod-upload-status-instance">未创建</strong></div>
+            <div class="rtc-status-item"><span>FileKey</span><strong id="vod-upload-status-filekey">未添加</strong></div>
+          </div>
+          <div class="upload-drop-zone">
+            <label>选择上传文件</label>
+            <input id="vod-upload-file" type="file">
+            <div id="vod-upload-file-info" class="upload-file-info">暂无文件</div>
+          </div>
+          <label style="margin-top:10px">上传进度</label>
+          <div class="upload-progress">
+            <div id="vod-upload-progress-bar" class="upload-progress-bar"></div>
+          </div>
+          <div id="vod-upload-result" class="openapi-result-output" style="margin-top:10px;min-height:230px;height:230px">// 等待上传</div>
+        </div>
+      </div>
+    </div>
+    <div id="vod-player-workbench" class="vod-player-only">
+      <div class="vod-player-layout">
+        <div class="openapi-box openapi-section">
+          <h3>点播播放器参数</h3>
+          <div class="vod-form-grid">
+            <div class="full">
+              <label>SDK JS 地址</label>
+              <input id="vod-player-js-url" value="https://lf-unpkg.volccdn.com/obj/vcloudfe/sdk/@volcengine/veplayer/1.17.0/index.min.js">
+            </div>
+            <div class="full">
+              <label>SDK CSS 地址</label>
+              <input id="vod-player-css-url" value="https://lf-unpkg.volccdn.com/obj/vcloudfe/sdk/@volcengine/veplayer/1.17.0/index.min.css">
+            </div>
+            <div class="full">
+              <label>License URL</label>
+              <input id="vod-player-license-url" value="" placeholder="https://example.com/license.lic">
+            </div>
+            <div class="full">
+              <label>License JSON</label>
+              <textarea id="vod-player-license-json" placeholder='{ "license": { "sign": "", "content": "", "mainUrl": "" } }'></textarea>
+            </div>
+            <div>
+              <label>播放模式</label>
+              <select id="vod-player-mode">
+                <option value="url">DirectUrl</option>
+                <option value="vid">Vid</option>
+              </select>
+            </div>
+            <div>
+              <label>自动播放</label>
+              <select id="vod-player-autoplay">
+                <option value="false">false</option>
+                <option value="true">true</option>
+              </select>
+            </div>
+            <div class="full">
+              <label>视频 URL</label>
+              <input id="vod-player-url" value="" placeholder="https://example.com/video.mp4">
+            </div>
+            <div>
+              <label>Vid</label>
+              <input id="vod-player-vid" value="" placeholder="Vid 模式使用">
+            </div>
+            <div>
+              <label>PlayAuthToken</label>
+              <input id="vod-player-token" class="secret-text" type="text" value="" placeholder="Vid 模式播放凭证" autocomplete="off" data-lpignore="true" data-1p-ignore>
+            </div>
+            <div>
+              <label>应用 ID（质量上报）</label>
+              <input id="vod-player-line-app-id" value="" placeholder="line_app_id">
+            </div>
+            <div>
+              <label>用户 ID（质量上报）</label>
+              <input id="vod-player-line-user-id" value="debug-user-001" placeholder="line_user_id">
+            </div>
+            <div class="full">
+              <label>扩展配置 JSON</label>
+              <textarea id="vod-player-extra-json" placeholder='{ "width": "100%", "height": 430 }'></textarea>
+            </div>
+          </div>
+          <div class="openapi-field-note">本地 `localhost` 和 `127.0.0.1` 默认可用于播放器 License 调试；DirectUrl 模式播放非 MP4 或加密视频时，视频资源需要支持 CORS。</div>
+          <div class="openapi-actions">
+            <button class="primary" type="button" onclick="loadVodPlayerSDK()">加载 SDK</button>
+            <button type="button" onclick="createVodPlayer()">创建播放器</button>
+            <button type="button" onclick="playVodPlayer()">播放</button>
+            <button type="button" onclick="pauseVodPlayer()">暂停</button>
+            <button type="button" onclick="destroyVodPlayer()">销毁播放器</button>
+          </div>
+        </div>
+        <div class="openapi-box openapi-section">
+          <h3>播放器预览</h3>
+          <div class="rtc-status-list">
+            <div class="rtc-status-item"><span>SDK</span><strong id="vod-player-status-sdk">未加载</strong></div>
+            <div class="rtc-status-item"><span>Player</span><strong id="vod-player-status-instance">未创建</strong></div>
+            <div class="rtc-status-item"><span>Mode</span><strong id="vod-player-status-mode">DirectUrl</strong></div>
+          </div>
+          <div class="vod-player-stage">
+            <div id="vod-player-container"></div>
+            <div id="vod-player-empty" class="vod-player-empty">请先填写播放参数，然后创建播放器</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="rtc-web-workbench" class="rtc-only">
+      <div class="rtc-layout">
+        <div class="openapi-box openapi-section">
+          <h3>RTC Web 参数</h3>
+          <label>SDK 地址</label>
+          <input id="rtc-sdk-url" value="https://lf-unpkg.volccdn.com/obj/vcloudfe/sdk/@volcengine/rtc/4.68.4/1778142355039/index.min.js">
+          <div class="openapi-field-note">默认使用火山引擎 RTC Web SDK CDN。线上 HTTPS 或 localhost 下才能正常使用摄像头和麦克风。</div>
+          <div class="rtc-form-grid">
+            <div>
+              <label>AppId</label>
+              <input id="rtc-app-id" value="" placeholder="RTC 控制台 AppId">
+            </div>
+            <div>
+              <label>UserId</label>
+              <input id="rtc-user-id" value="debug-user-001" placeholder="当前用户 ID">
+            </div>
+            <div>
+              <label>RoomId</label>
+              <input id="rtc-room-id" value="debug-room-001" placeholder="房间 ID">
+            </div>
+            <div>
+              <label>Token</label>
+              <input id="rtc-token" class="secret-text" type="text" value="" placeholder="进房 Token" autocomplete="off" data-lpignore="true" data-1p-ignore>
+            </div>
+            <div class="full">
+              <label>进房配置</label>
+              <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:4px">
+                <label><input type="checkbox" id="rtc-auto-publish" checked> 自动发布</label>
+                <label><input type="checkbox" id="rtc-auto-subscribe-audio" checked> 自动订阅音频</label>
+                <label><input type="checkbox" id="rtc-auto-subscribe-video" checked> 自动订阅视频</label>
+                <label><input type="checkbox" id="rtc-auto-preview" checked> 进房后本地预览</label>
+              </div>
+            </div>
+          </div>
+          <div class="openapi-actions">
+            <button class="primary" type="button" onclick="loadRtcWebSDK()">加载 SDK</button>
+            <button type="button" onclick="createRtcWebEngine()">创建引擎</button>
+            <button type="button" onclick="joinRtcWebRoom()">加入房间</button>
+            <button type="button" onclick="startRtcWebPreview()">本地预览</button>
+            <button type="button" onclick="leaveRtcWebRoom()">离开房间</button>
+            <button type="button" onclick="destroyRtcWebEngine()">销毁引擎</button>
+          </div>
+        </div>
+        <div class="openapi-box openapi-section">
+          <h3>音视频画面</h3>
+          <div class="rtc-status-list">
+            <div class="rtc-status-item"><span>SDK</span><strong id="rtc-status-sdk">未加载</strong></div>
+            <div class="rtc-status-item"><span>Engine</span><strong id="rtc-status-engine">未创建</strong></div>
+            <div class="rtc-status-item"><span>Room</span><strong id="rtc-status-room">未进房</strong></div>
+          </div>
+          <div class="rtc-video-grid">
+            <div class="rtc-video-box">
+              <h4>本地预览</h4>
+              <div id="rtc-local-player"></div>
+            </div>
+            <div class="rtc-video-box">
+              <h4>远端用户</h4>
+              <div id="rtc-remote-player"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1508,11 +2022,9 @@
       <div class="callback-layout">
         <div class="openapi-box openapi-section">
           <h3>回调地址</h3>
-          <input id="callback-function-url" value="" placeholder="https://example.com/callback">
-          <div class="openapi-field-note">把这个地址配置到火山引擎控制台或回调配置里。接收服务负责接收回调，页面负责查看和解析。</div>
-          <div id="callback-url-preview" class="callback-url-preview">// 请先填写回调地址</div>
+          <input id="callback-function-url" value="https://1302048544-0iyrgnpy6p.ap-hongkong.tencentscf.com" readonly>
+          <div class="openapi-field-note">把这个地址配置到火山引擎控制台或回调配置里。接收服务负责接收回调，页面负责查看和解析；最近回调当前只展示最新 50 条记录，超过后旧记录会被接收服务自动淘汰。</div>
           <div class="openapi-actions">
-            <button class="primary" type="button" onclick="saveCallbackConfig()">保存配置</button>
             <button type="button" onclick="copyCallbackUrl()">复制回调地址</button>
             <button type="button" onclick="fetchCallbackRecords()">查看最近回调</button>
             <button id="btn-callback-auto-refresh" type="button" onclick="toggleCallbackAutoRefresh()">自动刷新</button>
@@ -1676,6 +2188,22 @@ let activeScene = 'home';
 let liveSDKLoaded = false;
 let liveSDKKey = '';
 let liveSDKInstance = null;
+let rtcWebSDKLoaded = false;
+let rtcWebSDKUrl = '';
+let rtcWebSDK = null;
+let rtcWebEngine = null;
+let rtcWebJoined = false;
+let vodPlayerSDKLoaded = false;
+let vodPlayerJSUrl = '';
+let vodPlayerCSSUrl = '';
+let vodPlayerSDK = null;
+let vodPlayerInstance = null;
+let vodUploadSDKLoaded = false;
+let vodUploadSDKUrl = '';
+let vodUploadSDK = null;
+let vodUploader = null;
+let vodUploadFileKey = '';
+let vodUploadMonitorTimer = null;
 
 const liveAssetBase = 'https://mediaservice-fe.volccdn.com/obj/vcloud-fe/livesaas-client';
 const liveTerminalLabels = {
@@ -1839,6 +2367,9 @@ function setScene(scene) {
   document.getElementById('scene-home').classList.toggle('active', scene === 'home');
   document.getElementById('scene-cloud-phone').classList.toggle('active', scene === 'cloud-phone');
   document.getElementById('scene-enterprise-live').classList.toggle('active', scene === 'enterprise-live');
+  document.getElementById('scene-rtc-web').classList.toggle('active', scene === 'rtc-web');
+  document.getElementById('scene-vod-player').classList.toggle('active', scene === 'vod-player');
+  document.getElementById('scene-vod-upload').classList.toggle('active', scene === 'vod-upload');
   document.getElementById('scene-openapi').classList.toggle('active', scene === 'openapi');
   document.getElementById('scene-callback').classList.toggle('active', scene === 'callback');
   if (scene === 'home') {
@@ -1851,6 +2382,18 @@ function setScene(scene) {
     document.getElementById('state-badge').textContent = 'OpenAPI';
     document.getElementById('state-badge').className = 'badge badge-connecting';
     document.getElementById('version-display').textContent = '火山引擎签名调试';
+  } else if (scene === 'rtc-web') {
+    document.getElementById('state-badge').textContent = rtcWebJoined ? 'RTC_JOINED' : (rtcWebEngine ? 'ENGINE_READY' : (rtcWebSDKLoaded ? 'SDK_READY' : '未加载'));
+    document.getElementById('state-badge').className = `badge ${rtcWebJoined ? 'badge-connected' : (rtcWebSDKLoaded ? 'badge-connecting' : 'badge-disconnected')}`;
+    document.getElementById('version-display').textContent = 'RTC Web SDK';
+  } else if (scene === 'vod-player') {
+    document.getElementById('state-badge').textContent = vodPlayerInstance ? 'PLAYER_READY' : (vodPlayerSDKLoaded ? 'SDK_READY' : '未加载');
+    document.getElementById('state-badge').className = `badge ${vodPlayerInstance ? 'badge-connected' : (vodPlayerSDKLoaded ? 'badge-connecting' : 'badge-disconnected')}`;
+    document.getElementById('version-display').textContent = 'VePlayer';
+  } else if (scene === 'vod-upload') {
+    document.getElementById('state-badge').textContent = vodUploader ? 'UPLOADER_READY' : (vodUploadSDKLoaded ? 'SDK_READY' : '未加载');
+    document.getElementById('state-badge').className = `badge ${vodUploader ? 'badge-connected' : (vodUploadSDKLoaded ? 'badge-connecting' : 'badge-disconnected')}`;
+    document.getElementById('version-display').textContent = 'TTUploader';
   } else if (scene === 'callback') {
     document.getElementById('state-badge').textContent = 'Callback';
     document.getElementById('state-badge').className = 'badge badge-connecting';
@@ -2179,6 +2722,942 @@ function destroyEnterpriseLiveRoom(options = {}) {
   resetEnterpriseLiveMount();
   if (!options.silent) log('企业直播实例已销毁', 'success');
   updateLiveControls();
+}
+
+function updateRtcWebStatus() {
+  const sdkEl = document.getElementById('rtc-status-sdk');
+  const engineEl = document.getElementById('rtc-status-engine');
+  const roomEl = document.getElementById('rtc-status-room');
+  if (sdkEl) sdkEl.textContent = rtcWebSDKLoaded ? '已加载' : '未加载';
+  if (engineEl) engineEl.textContent = rtcWebEngine ? '已创建' : '未创建';
+  if (roomEl) roomEl.textContent = rtcWebJoined ? '已进房' : '未进房';
+  if (activeScene === 'rtc-web') setScene('rtc-web');
+}
+
+function getRtcWebSDKGlobal() {
+  return window.VERTC?.default || window.VERTC || window.ByteRTC || window.RTC;
+}
+
+function getRtcWebConstant(path, fallback) {
+  return path.split('.').reduce((obj, key) => obj?.[key], rtcWebSDK) ?? fallback;
+}
+
+async function loadRtcWebSDK() {
+  const url = document.getElementById('rtc-sdk-url').value.trim();
+  if (!url) {
+    log('请先填写 RTC Web SDK 地址', 'error');
+    return;
+  }
+  if (rtcWebSDKLoaded && rtcWebSDKUrl === url && getRtcWebSDKGlobal()) {
+    log('RTC Web SDK 已加载', 'info');
+    updateRtcWebStatus();
+    return;
+  }
+  destroyRtcWebEngine({ silent: true });
+  document.querySelectorAll('[data-rtc-web-sdk]').forEach(el => el.remove());
+  rtcWebSDKLoaded = false;
+  rtcWebSDKUrl = url;
+  rtcWebSDK = null;
+  log(`正在加载 RTC Web SDK: ${url}`, 'info');
+  try {
+    await loadExternalAsset('script', {
+      src: url,
+      'data-rtc-web-sdk': 'true',
+    });
+    rtcWebSDK = getRtcWebSDKGlobal();
+    if (!rtcWebSDK?.createEngine) {
+      throw new Error('未找到 VERTC.createEngine，请确认 SDK 地址是否正确');
+    }
+    rtcWebSDKLoaded = true;
+    log('RTC Web SDK 加载成功', 'success');
+  } catch (err) {
+    rtcWebSDKLoaded = false;
+    rtcWebSDK = null;
+    log(`RTC Web SDK 加载失败: ${err.message || err}`, 'error');
+  } finally {
+    updateRtcWebStatus();
+  }
+}
+
+async function createRtcWebEngine() {
+  if (!rtcWebSDKLoaded || !rtcWebSDK?.createEngine) {
+    await loadRtcWebSDK();
+  }
+  if (!rtcWebSDK?.createEngine) return;
+  const appId = document.getElementById('rtc-app-id').value.trim();
+  if (!appId) {
+    log('请先填写 RTC AppId', 'error');
+    return;
+  }
+  destroyRtcWebEngine({ silent: true, keepSDK: true });
+  try {
+    rtcWebEngine = rtcWebSDK.createEngine(appId);
+    window.__rtcWebEngine = rtcWebEngine;
+    bindRtcWebEvents();
+    log('RTC Web Engine 已创建，并暴露到 window.__rtcWebEngine', 'success');
+  } catch (err) {
+    rtcWebEngine = null;
+    log(`RTC Web Engine 创建失败: ${err.message || err}`, 'error');
+  } finally {
+    updateRtcWebStatus();
+  }
+}
+
+function bindRtcWebEvents() {
+  if (!rtcWebEngine?.on || !rtcWebSDK) return;
+  const events = rtcWebSDK.events || {};
+  const eventEntries = [
+    ['onUserPublishStream', events.onUserPublishStream],
+    ['onUserUnpublishStream', events.onUserUnpublishStream],
+    ['onUserJoined', events.onUserJoined],
+    ['onUserLeave', events.onUserLeave],
+    ['onRoomStateChanged', events.onRoomStateChanged],
+    ['onError', events.onError],
+    ['onWarning', events.onWarning],
+  ].filter(([, eventName]) => eventName);
+
+  eventEntries.forEach(([label, eventName]) => {
+    try {
+      rtcWebEngine.on(eventName, async (...args) => {
+        log(`[RTC 事件] ${label}: ${args.map(arg => {
+          try { return JSON.stringify(arg); } catch { return String(arg); }
+        }).join(', ')}`, label === 'onError' ? 'error' : 'event');
+        if (label === 'onUserPublishStream') {
+          await handleRtcWebUserPublish(args[0] || {});
+        }
+        if (label === 'onUserUnpublishStream' || label === 'onUserLeave') {
+          document.getElementById('rtc-remote-player').innerHTML = '';
+        }
+      });
+    } catch (err) {
+      log(`RTC 事件监听失败 ${label}: ${err.message || err}`, 'warn');
+    }
+  });
+}
+
+async function handleRtcWebUserPublish(event = {}) {
+  if (!rtcWebEngine?.setRemoteVideoPlayer) return;
+  const userId = event.userId || event.uid || event.user?.userId || '';
+  if (!userId) return;
+  try {
+    await rtcWebEngine.setRemoteVideoPlayer(getRtcWebConstant('StreamIndex.STREAM_INDEX_MAIN', 0), {
+      userId,
+      renderDom: document.getElementById('rtc-remote-player'),
+    });
+    log(`RTC 远端画面已设置: ${userId}`, 'success');
+  } catch (err) {
+    log(`RTC 设置远端画面失败: ${err.message || err}`, 'error');
+  }
+}
+
+async function joinRtcWebRoom() {
+  if (!rtcWebEngine) {
+    await createRtcWebEngine();
+  }
+  if (!rtcWebEngine?.joinRoom) return;
+  const token = document.getElementById('rtc-token').value.trim();
+  const roomId = document.getElementById('rtc-room-id').value.trim();
+  const userId = document.getElementById('rtc-user-id').value.trim();
+  const missing = [];
+  if (!token) missing.push('Token');
+  if (!roomId) missing.push('RoomId');
+  if (!userId) missing.push('UserId');
+  if (missing.length) {
+    log(`RTC 进房参数缺失: ${missing.join(', ')}`, 'error');
+    return;
+  }
+  try {
+    await rtcWebEngine.joinRoom(
+      token,
+      roomId,
+      { userId },
+      {
+        isAutoPublish: document.getElementById('rtc-auto-publish').checked,
+        isAutoSubscribeAudio: document.getElementById('rtc-auto-subscribe-audio').checked,
+        isAutoSubscribeVideo: document.getElementById('rtc-auto-subscribe-video').checked,
+        roomProfileType: getRtcWebConstant('RoomProfileType.communication', 'communication'),
+      },
+    );
+    rtcWebJoined = true;
+    log(`RTC 已加入房间: ${roomId}/${userId}`, 'success');
+    if (document.getElementById('rtc-auto-preview').checked) {
+      await startRtcWebPreview();
+    }
+  } catch (err) {
+    log(`RTC 加入房间失败: ${err.message || err}`, 'error');
+  } finally {
+    updateRtcWebStatus();
+  }
+}
+
+async function startRtcWebPreview() {
+  if (!rtcWebEngine) {
+    await createRtcWebEngine();
+  }
+  if (!rtcWebEngine) return;
+  try {
+    if (rtcWebEngine.startAudioCapture) await rtcWebEngine.startAudioCapture();
+    if (rtcWebEngine.startVideoCapture) await rtcWebEngine.startVideoCapture();
+    if (rtcWebEngine.setLocalVideoPlayer) {
+      await rtcWebEngine.setLocalVideoPlayer(getRtcWebConstant('StreamIndex.STREAM_INDEX_MAIN', 0), {
+        renderDom: document.getElementById('rtc-local-player'),
+      });
+    }
+    log('RTC 本地音视频采集已开启', 'success');
+  } catch (err) {
+    log(`RTC 本地预览失败: ${err.message || err}`, 'error');
+  }
+}
+
+async function leaveRtcWebRoom(options = {}) {
+  if (!rtcWebEngine) return;
+  try {
+    if (rtcWebEngine.leaveRoom) await rtcWebEngine.leaveRoom();
+    if (rtcWebEngine.stopAudioCapture) await rtcWebEngine.stopAudioCapture();
+    if (rtcWebEngine.stopVideoCapture) await rtcWebEngine.stopVideoCapture();
+    document.getElementById('rtc-local-player').innerHTML = '';
+    document.getElementById('rtc-remote-player').innerHTML = '';
+    rtcWebJoined = false;
+    if (!options.silent) log('RTC 已离开房间', 'success');
+  } catch (err) {
+    if (!options.silent) log(`RTC 离房失败: ${err.message || err}`, 'error');
+  } finally {
+    updateRtcWebStatus();
+  }
+}
+
+function destroyRtcWebEngine(options = {}) {
+  if (rtcWebEngine) {
+    try {
+      if (rtcWebEngine.leaveRoom && rtcWebJoined) rtcWebEngine.leaveRoom();
+      if (rtcWebEngine.stopAudioCapture) rtcWebEngine.stopAudioCapture();
+      if (rtcWebEngine.stopVideoCapture) rtcWebEngine.stopVideoCapture();
+      if (rtcWebEngine.destroy) rtcWebEngine.destroy();
+    } catch (err) {
+      if (!options.silent) log(`RTC Engine 销毁异常: ${err.message || err}`, 'error');
+    }
+  }
+  rtcWebEngine = null;
+  rtcWebJoined = false;
+  document.getElementById('rtc-local-player').innerHTML = '';
+  document.getElementById('rtc-remote-player').innerHTML = '';
+  if (!options.keepSDK && !options.silent) log('RTC Engine 已销毁', 'success');
+  updateRtcWebStatus();
+}
+
+function updateVodPlayerStatus() {
+  const sdkEl = document.getElementById('vod-player-status-sdk');
+  const instanceEl = document.getElementById('vod-player-status-instance');
+  const modeEl = document.getElementById('vod-player-status-mode');
+  if (sdkEl) sdkEl.textContent = vodPlayerSDKLoaded ? '已加载' : '未加载';
+  if (instanceEl) instanceEl.textContent = vodPlayerInstance ? '已创建' : '未创建';
+  if (modeEl) modeEl.textContent = document.getElementById('vod-player-mode')?.value === 'vid' ? 'Vid' : 'DirectUrl';
+  const empty = document.getElementById('vod-player-empty');
+  if (empty) empty.style.display = vodPlayerInstance ? 'none' : '';
+  if (activeScene === 'vod-player') setScene('vod-player');
+}
+
+function getVodPlayerSDKGlobal() {
+  return window.VePlayer?.default || window.VePlayer || window.VodPlayer || window.Veplayer;
+}
+
+async function loadVodPlayerSDK() {
+  const jsUrl = document.getElementById('vod-player-js-url').value.trim();
+  const cssUrl = document.getElementById('vod-player-css-url').value.trim();
+  if (!jsUrl || !cssUrl) {
+    log('请先填写 VePlayer JS 和 CSS 地址', 'error');
+    return;
+  }
+  if (vodPlayerSDKLoaded && vodPlayerJSUrl === jsUrl && vodPlayerCSSUrl === cssUrl && getVodPlayerSDKGlobal()) {
+    log('VePlayer SDK 已加载', 'info');
+    updateVodPlayerStatus();
+    return;
+  }
+  destroyVodPlayer({ silent: true });
+  document.querySelectorAll('[data-vod-player-sdk]').forEach(el => el.remove());
+  vodPlayerSDKLoaded = false;
+  vodPlayerSDK = null;
+  vodPlayerJSUrl = jsUrl;
+  vodPlayerCSSUrl = cssUrl;
+  log(`正在加载 VePlayer SDK: ${jsUrl}`, 'info');
+  try {
+    await loadExternalAsset('link', {
+      rel: 'stylesheet',
+      href: cssUrl,
+      'data-vod-player-sdk': 'css',
+    });
+    await loadExternalAsset('script', {
+      src: jsUrl,
+      'data-vod-player-sdk': 'js',
+    });
+    vodPlayerSDK = getVodPlayerSDKGlobal();
+    if (typeof vodPlayerSDK !== 'function') {
+      throw new Error('未找到 VePlayer 构造函数，请确认 SDK 地址是否正确');
+    }
+    vodPlayerSDKLoaded = true;
+    log('VePlayer SDK 加载成功', 'success');
+  } catch (err) {
+    vodPlayerSDKLoaded = false;
+    vodPlayerSDK = null;
+    log(`VePlayer SDK 加载失败: ${err.message || err}`, 'error');
+  } finally {
+    updateVodPlayerStatus();
+  }
+}
+
+function applyVodPlayerLicenseConfig() {
+  if (!vodPlayerSDK?.setLicenseConfig) return;
+  const licenseUrl = document.getElementById('vod-player-license-url').value.trim();
+  const licenseJson = document.getElementById('vod-player-license-json').value.trim();
+  if (!licenseUrl && !licenseJson) return;
+  try {
+    const config = licenseJson ? safeJsonParse(licenseJson, 'License JSON') : { license: licenseUrl };
+    vodPlayerSDK.setLicenseConfig(config);
+    log('VePlayer License 配置已应用', 'success');
+  } catch (err) {
+    throw new Error(`License 配置失败: ${err.message || err}`);
+  }
+}
+
+function getVodPlayerConfig() {
+  const mode = document.getElementById('vod-player-mode').value;
+  const url = document.getElementById('vod-player-url').value.trim();
+  const vid = document.getElementById('vod-player-vid').value.trim();
+  const token = document.getElementById('vod-player-token').value.trim();
+  const lineAppId = document.getElementById('vod-player-line-app-id').value.trim();
+  const lineUserId = document.getElementById('vod-player-line-user-id').value.trim();
+  const extraRaw = document.getElementById('vod-player-extra-json').value.trim();
+  const extra = extraRaw ? readOptionalObjectJson('vod-player-extra-json', '扩展配置 JSON') : {};
+  const config = {
+    root: document.getElementById('vod-player-container'),
+    width: '100%',
+    height: 430,
+    autoplay: document.getElementById('vod-player-autoplay').value === 'true',
+    ...extra,
+  };
+  if (mode === 'vid') {
+    if (!vid) throw new Error('Vid 模式需要填写 Vid');
+    config.vid = vid;
+    if (token) config.playAuthToken = token;
+  } else {
+    if (!url) throw new Error('DirectUrl 模式需要填写视频 URL');
+    config.url = url;
+  }
+  if (lineAppId || lineUserId) {
+    config.vodLogOpts = {
+      ...(config.vodLogOpts || {}),
+      ...(lineAppId ? { line_app_id: Number.isNaN(Number(lineAppId)) ? lineAppId : Number(lineAppId) } : {}),
+      ...(lineUserId ? { line_user_id: lineUserId } : {}),
+    };
+  }
+  return config;
+}
+
+function bindVodPlayerEvents() {
+  if (!vodPlayerInstance?.on) return;
+  ['play', 'pause', 'ended', 'error', 'waiting', 'playing', 'loadedmetadata', 'timeupdate', 'firstplay'].forEach(eventName => {
+    try {
+      vodPlayerInstance.on(eventName, (...args) => {
+        const brief = eventName === 'timeupdate' ? '' : `: ${args.map(arg => {
+          try { return JSON.stringify(arg); } catch { return String(arg); }
+        }).join(', ')}`;
+        log(`[点播播放器事件] ${eventName}${brief}`, eventName === 'error' ? 'error' : 'event');
+      });
+    } catch {
+      // 不同版本事件名可能有差异，忽略不可绑定的事件。
+    }
+  });
+}
+
+async function createVodPlayer() {
+  if (!vodPlayerSDKLoaded || typeof vodPlayerSDK !== 'function') {
+    await loadVodPlayerSDK();
+  }
+  if (typeof vodPlayerSDK !== 'function') return;
+  try {
+    destroyVodPlayer({ silent: true, keepSDK: true });
+    applyVodPlayerLicenseConfig();
+    const config = getVodPlayerConfig();
+    vodPlayerInstance = new vodPlayerSDK(config);
+    window.__vePlayer = vodPlayerInstance;
+    bindVodPlayerEvents();
+    log(`VePlayer 已创建: ${JSON.stringify({ ...config, root: '#vod-player-container', playAuthToken: config.playAuthToken ? '***' : undefined })}`, 'success');
+  } catch (err) {
+    vodPlayerInstance = null;
+    log(`VePlayer 创建失败: ${err.message || err}`, 'error');
+  } finally {
+    updateVodPlayerStatus();
+  }
+}
+
+function playVodPlayer() {
+  if (!vodPlayerInstance) {
+    createVodPlayer();
+    return;
+  }
+  try {
+    const result = vodPlayerInstance.play?.();
+    log('VePlayer 已调用播放', 'success');
+    return result;
+  } catch (err) {
+    log(`VePlayer 播放失败: ${err.message || err}`, 'error');
+  }
+}
+
+function pauseVodPlayer() {
+  if (!vodPlayerInstance?.pause) {
+    log('VePlayer 实例未创建', 'error');
+    return;
+  }
+  try {
+    vodPlayerInstance.pause();
+    log('VePlayer 已暂停', 'success');
+  } catch (err) {
+    log(`VePlayer 暂停失败: ${err.message || err}`, 'error');
+  }
+}
+
+function destroyVodPlayer(options = {}) {
+  if (vodPlayerInstance) {
+    try {
+      if (vodPlayerInstance.destroy) vodPlayerInstance.destroy();
+      else if (vodPlayerInstance.dispose) vodPlayerInstance.dispose();
+    } catch (err) {
+      if (!options.silent) log(`VePlayer 销毁异常: ${err.message || err}`, 'error');
+    }
+  }
+  vodPlayerInstance = null;
+  const container = document.getElementById('vod-player-container');
+  if (container) container.innerHTML = '';
+  if (!options.keepSDK && !options.silent) log('VePlayer 已销毁', 'success');
+  updateVodPlayerStatus();
+}
+
+function updateVodUploadStatus() {
+  const sdkEl = document.getElementById('vod-upload-status-sdk');
+  const instanceEl = document.getElementById('vod-upload-status-instance');
+  const fileKeyEl = document.getElementById('vod-upload-status-filekey');
+  if (sdkEl) sdkEl.textContent = vodUploadSDKLoaded ? '已加载' : '未加载';
+  if (instanceEl) instanceEl.textContent = vodUploader ? '已创建' : '未创建';
+  if (fileKeyEl) fileKeyEl.textContent = vodUploadFileKey || '未添加';
+  if (activeScene === 'vod-upload') setScene('vod-upload');
+}
+
+function setVodUploadProgress(percent = 0) {
+  const bar = document.getElementById('vod-upload-progress-bar');
+  if (!bar) return;
+  const normalized = Math.max(0, Math.min(100, Number(percent) || 0));
+  bar.style.width = `${normalized}%`;
+}
+
+function setVodUploadResult(value, level = 'info') {
+  const el = document.getElementById('vod-upload-result');
+  if (!el) return;
+  el.style.color = level === 'error' ? 'var(--error)' : (level === 'success' ? 'var(--success)' : 'var(--text2)');
+  el.textContent = typeof value === 'string' ? value : safeVodUploadStringify(value);
+}
+
+function safeVodUploadStringify(value) {
+  const seen = new WeakSet();
+  try {
+    return JSON.stringify(maskOpenApiValue(value), (key, val) => {
+      if (key === 'xhr' || key === 'request' || key === 'response' || key === 'task') {
+        return '[object omitted]';
+      }
+      if (val instanceof File) {
+        return {
+          name: val.name,
+          size: val.size,
+          type: val.type,
+          lastModified: val.lastModified,
+        };
+      }
+      if (val && typeof val === 'object') {
+        if (seen.has(val)) return '[Circular]';
+        seen.add(val);
+      }
+      return val;
+    }, 2);
+  } catch (err) {
+    return String(value);
+  }
+}
+
+function compactVodUploadInfo(info = {}) {
+  const task = getVodUploadTaskSnapshot(info?.key || vodUploadFileKey);
+  return {
+    fileKey: info?.key || vodUploadFileKey,
+    percent: info?.percent ?? task?.percent,
+    uploadResult: info?.uploadResult || task?.uploadResult || task?.result,
+    extra: info?.extra || task?.extra,
+    fileName: info?.fileName || task?.fileName,
+    fileSize: info?.fileSize || task?.fileSize,
+    status: info?.status ?? task?.status,
+    stage: info?.stage ?? task?.stage,
+  };
+}
+
+function getVodUploadTaskSnapshot(fileKey = vodUploadFileKey) {
+  if (!vodUploader || !fileKey) return null;
+  return vodUploader.tasks?.[fileKey] || vodUploader.cache?.[fileKey] || null;
+}
+
+function normalizeVodUploadPercent(info) {
+  const raw = info?.percent ?? info?.progress ?? info?.Percent ?? info?.loadedPercent ?? 0;
+  const numeric = Number(raw);
+  if (!Number.isFinite(numeric)) return 0;
+  return numeric <= 1 ? numeric * 100 : numeric;
+}
+
+function markVodUploadComplete(info = {}) {
+  clearVodUploadMonitor();
+  setVodUploadProgress(100);
+  const task = getVodUploadTaskSnapshot();
+  const uploadResult = info?.uploadResult || task?.uploadResult || task?.extra?.uploadResult || task?.result || compactVodUploadInfo(info) || '上传完成';
+  setVodUploadResult({
+    message: '上传完成',
+    fileKey: info?.key || vodUploadFileKey,
+    result: uploadResult,
+  }, 'success');
+  log(`上传完成: ${info?.key || vodUploadFileKey || '当前文件'}`, 'success');
+}
+
+function clearVodUploadMonitor() {
+  if (vodUploadMonitorTimer) {
+    clearInterval(vodUploadMonitorTimer);
+    vodUploadMonitorTimer = null;
+  }
+}
+
+function startVodUploadMonitor(fileKey) {
+  clearVodUploadMonitor();
+  vodUploadMonitorTimer = setInterval(() => {
+    const task = getVodUploadTaskSnapshot(fileKey);
+    if (!task) return;
+    const percent = normalizeVodUploadPercent(task);
+    if (percent > 0) setVodUploadProgress(percent);
+    if (task.status === 4 || task.type === 'success' || task.taskAllFinish && task.status !== 5) {
+      markVodUploadComplete({ ...task, key: fileKey });
+    }
+    if (task.status === 5 || task.type === 'error') {
+      clearVodUploadMonitor();
+      setVodUploadResult(task.extra || task.error || task, 'error');
+      log(`上传失败: ${safeVodUploadStringify(task.extra || task.error || task)}`, 'error');
+    }
+  }, 800);
+}
+
+function getVodUploadSDKGlobal() {
+  return window.TTUploader?.default || window.TTUploader || window.TtUploader || window.ttUploader;
+}
+
+async function loadVodUploadSDK() {
+  const url = document.getElementById('vod-upload-sdk-url').value.trim();
+  if (!url) {
+    log('请先填写上传 SDK 地址', 'error');
+    return;
+  }
+  if (vodUploadSDKLoaded && vodUploadSDKUrl === url && getVodUploadSDKGlobal()) {
+    log('Web 上传 SDK 已加载', 'info');
+    updateVodUploadStatus();
+    return;
+  }
+  resetVodUploader({ silent: true });
+  document.querySelectorAll('[data-vod-upload-sdk]').forEach(el => el.remove());
+  vodUploadSDKLoaded = false;
+  vodUploadSDK = null;
+  vodUploadSDKUrl = url;
+  log(`正在加载 Web 上传 SDK: ${url}`, 'info');
+  try {
+    await loadExternalAsset('script', {
+      src: url,
+      'data-vod-upload-sdk': 'true',
+    });
+    vodUploadSDK = getVodUploadSDKGlobal();
+    if (typeof vodUploadSDK !== 'function') {
+      throw new Error('未找到 TTUploader 构造函数，请确认 SDK 地址是否正确');
+    }
+    vodUploadSDKLoaded = true;
+    log('Web 上传 SDK 加载成功', 'success');
+  } catch (err) {
+    vodUploadSDKLoaded = false;
+    vodUploadSDK = null;
+    log(`Web 上传 SDK 加载失败: ${err.message || err}`, 'error');
+  } finally {
+    updateVodUploadStatus();
+  }
+}
+
+function bytesToBase64(bytes) {
+  let binary = '';
+  bytes.forEach(byte => {
+    binary += String.fromCharCode(byte);
+  });
+  return btoa(binary);
+}
+
+function textToBytes(text) {
+  return new TextEncoder().encode(text);
+}
+
+function concatBytes(...chunks) {
+  const total = chunks.reduce((sum, chunk) => sum + chunk.length, 0);
+  const result = new Uint8Array(total);
+  let offset = 0;
+  chunks.forEach(chunk => {
+    result.set(chunk, offset);
+    offset += chunk.length;
+  });
+  return result;
+}
+
+function md5Bytes(input) {
+  const bytes = typeof input === 'string' ? textToBytes(input) : new Uint8Array(input);
+  const bitLength = bytes.length * 8;
+  const withOne = new Uint8Array(bytes.length + 1);
+  withOne.set(bytes);
+  withOne[bytes.length] = 0x80;
+  const paddedLength = (((withOne.length + 8 + 63) >> 6) << 6);
+  const padded = new Uint8Array(paddedLength);
+  padded.set(withOne);
+  const view = new DataView(padded.buffer);
+  view.setUint32(paddedLength - 8, bitLength >>> 0, true);
+  view.setUint32(paddedLength - 4, Math.floor(bitLength / 0x100000000), true);
+
+  let a0 = 0x67452301;
+  let b0 = 0xefcdab89;
+  let c0 = 0x98badcfe;
+  let d0 = 0x10325476;
+  const s = [
+    7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
+    5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20,
+    4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
+    6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21,
+  ];
+  const k = Array.from({ length: 64 }, (_, i) => Math.floor(Math.abs(Math.sin(i + 1)) * 0x100000000));
+  const rotl = (x, n) => ((x << n) | (x >>> (32 - n))) >>> 0;
+
+  for (let offset = 0; offset < padded.length; offset += 64) {
+    const m = Array.from({ length: 16 }, (_, i) => view.getUint32(offset + i * 4, true));
+    let a = a0;
+    let b = b0;
+    let c = c0;
+    let d = d0;
+    for (let i = 0; i < 64; i++) {
+      let f;
+      let g;
+      if (i < 16) {
+        f = (b & c) | (~b & d);
+        g = i;
+      } else if (i < 32) {
+        f = (d & b) | (~d & c);
+        g = (5 * i + 1) % 16;
+      } else if (i < 48) {
+        f = b ^ c ^ d;
+        g = (3 * i + 5) % 16;
+      } else {
+        f = c ^ (b | ~d);
+        g = (7 * i) % 16;
+      }
+      const tmp = d;
+      d = c;
+      c = b;
+      b = (b + rotl((a + f + k[i] + m[g]) >>> 0, s[i])) >>> 0;
+      a = tmp;
+    }
+    a0 = (a0 + a) >>> 0;
+    b0 = (b0 + b) >>> 0;
+    c0 = (c0 + c) >>> 0;
+    d0 = (d0 + d) >>> 0;
+  }
+
+  const output = new Uint8Array(16);
+  const outView = new DataView(output.buffer);
+  [a0, b0, c0, d0].forEach((value, index) => outView.setUint32(index * 4, value, true));
+  return output;
+}
+
+function zeroPadToBlock(bytes, blockSize) {
+  const padding = blockSize - (bytes.length % blockSize);
+  if (padding === 0) return bytes;
+  const padded = new Uint8Array(bytes.length + padding);
+  padded.set(bytes);
+  return padded;
+}
+
+async function aesCbcEncryptBase64(data, keyBytes) {
+  if (![16, 24, 32].includes(keyBytes.length)) {
+    throw new Error('AES Key 长度必须是 16 / 24 / 32 字节');
+  }
+  const key = await crypto.subtle.importKey('raw', keyBytes, { name: 'AES-CBC' }, false, ['encrypt']);
+  const zeroPadded = zeroPadToBlock(typeof data === 'string' ? textToBytes(data) : data, keyBytes.length);
+  const encrypted = await crypto.subtle.encrypt({ name: 'AES-CBC', iv: keyBytes }, key, zeroPadded);
+  return bytesToBase64(new Uint8Array(encrypted));
+}
+
+function generateVodTempAccessKeyId() {
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  const hex = Array.from(bytes).map(byte => byte.toString(16).padStart(2, '0')).join('');
+  return `AKTP${btoa(hex).replace(/[=/+-]/g, '')}`;
+}
+
+async function generateVodTempSecretAccessKey() {
+  const letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const random = new Uint8Array(32);
+  crypto.getRandomValues(random);
+  const text = Array.from(random).map(byte => letters[byte % 32]).join('');
+  return aesCbcEncryptBase64(text, textToBytes('volcenginenodejs'));
+}
+
+async function createVodUploadToken({ accessKeyId, secretAccessKey, expireMinutes }) {
+  const policy = {
+    Statement: [
+      {
+        Effect: 'Allow',
+        Action: ['Vod:ApplyUploadInfo', 'Vod:CommitUploadInfo'],
+        Resource: [],
+      },
+    ],
+  };
+  const now = Date.now();
+  const expireMs = Math.max(1, Number(expireMinutes) || 60) * 60 * 1000;
+  const expireSeconds = Math.round((now + expireMs) / 1000);
+  const tempAccessKeyId = generateVodTempAccessKeyId();
+  const tempSecretAccessKey = await generateVodTempSecretAccessKey();
+  const md5Key = md5Bytes(secretAccessKey);
+  const encryptedSecret = await aesCbcEncryptBase64(tempSecretAccessKey, md5Key);
+  const signedSecretAccessKey = encryptedSecret.slice(0, -24);
+  const policyString = JSON.stringify(policy);
+  const signStr = [
+    accessKeyId,
+    tempAccessKeyId,
+    expireSeconds,
+    signedSecretAccessKey,
+    policyString,
+  ].join('|');
+  const signature = bytesToHex(await hmacBytes(md5Key, signStr));
+  const innerToken = {
+    LTAccessKeyId: accessKeyId,
+    AccessKeyId: tempAccessKeyId,
+    SignedSecretAccessKey: signedSecretAccessKey,
+    ExpiredTime: expireSeconds,
+    PolicyString: policyString,
+    Signature: signature,
+  };
+  return {
+    CurrentTime: new Date(now).toISOString(),
+    ExpiredTime: new Date(now + expireMs).toISOString(),
+    SessionToken: `STS2${btoa(JSON.stringify(innerToken))}`,
+    AccessKeyId: tempAccessKeyId,
+    SecretAccessKey: tempSecretAccessKey,
+  };
+}
+
+async function generateVodUploadToken() {
+  const akEl = document.getElementById('vod-upload-token-ak');
+  const skEl = document.getElementById('vod-upload-token-sk');
+  const expireEl = document.getElementById('vod-upload-token-expire');
+  const statusEl = document.getElementById('vod-upload-token-status');
+  const accessKeyId = akEl.value.trim();
+  const secretAccessKey = skEl.value.trim();
+  if (!accessKeyId || !secretAccessKey) {
+    log('请先填写用于生成上传 Token 的 AK/SK', 'error');
+    return;
+  }
+  try {
+    if (statusEl) statusEl.value = '生成中...';
+    const token = await createVodUploadToken({
+      accessKeyId,
+      secretAccessKey,
+      expireMinutes: expireEl.value,
+    });
+    document.getElementById('vod-upload-token').value = JSON.stringify(token, null, 2);
+    if (statusEl) statusEl.value = `已生成，到期 ${token.ExpiredTime}`;
+    setVodUploadResult({
+      message: '上传 Token 已生成，并已填入临时上传 Token',
+      token,
+    }, 'success');
+    log('点播临时上传 Token 已生成', 'success');
+  } catch (err) {
+    if (statusEl) statusEl.value = '生成失败';
+    log(`生成上传 Token 失败: ${err.message || err}`, 'error');
+    setVodUploadResult(`Error: ${err.message || err}`, 'error');
+  }
+}
+
+function parseVodUploadToken() {
+  const raw = document.getElementById('vod-upload-token').value.trim();
+  if (!raw) throw new Error('请先填写临时上传 Token');
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return raw;
+  }
+}
+
+function getVodUploadConfig() {
+  const userId = document.getElementById('vod-upload-user-id').value.trim();
+  const appIdRaw = document.getElementById('vod-upload-app-id').value.trim();
+  const spaceName = document.getElementById('vod-upload-space-name').value.trim();
+  const region = document.getElementById('vod-upload-region').value;
+  const parallelRaw = document.getElementById('vod-upload-parallel').value.trim();
+  const missing = [];
+  if (!userId) missing.push('UserId');
+  if (!appIdRaw) missing.push('AppId');
+  if (!spaceName) missing.push('SpaceName');
+  if (missing.length) throw new Error(`上传初始化参数缺失: ${missing.join(', ')}`);
+  return {
+    userId,
+    appId: Number.isNaN(Number(appIdRaw)) ? appIdRaw : Number(appIdRaw),
+    videoConfig: {
+      spaceName,
+    },
+    Region: region,
+    parallel: Math.max(1, Number(parallelRaw) || 1),
+  };
+}
+
+async function createVodUploader() {
+  if (!vodUploadSDKLoaded || typeof vodUploadSDK !== 'function') {
+    await loadVodUploadSDK();
+  }
+  if (typeof vodUploadSDK !== 'function') return;
+  try {
+    resetVodUploader({ silent: true, keepSDK: true });
+    vodUploader = new vodUploadSDK(getVodUploadConfig());
+    window.__vodUploader = vodUploader;
+    bindVodUploadEvents();
+    log('Web 上传实例已创建，并暴露到 window.__vodUploader', 'success');
+    setVodUploadResult('// 上传实例已创建');
+  } catch (err) {
+    vodUploader = null;
+    log(`Web 上传实例创建失败: ${err.message || err}`, 'error');
+    setVodUploadResult(`Error: ${err.message || err}`, 'error');
+  } finally {
+    updateVodUploadStatus();
+  }
+}
+
+function bindVodUploadEvents() {
+  if (!vodUploader?.on) return;
+  ['complete', 'success', 'finish', 'done', 'error', 'progress', 'start', 'pause', 'cancel', 1005].forEach(eventName => {
+    try {
+      vodUploader.on(eventName, info => {
+        if (eventName === 'progress') {
+          setVodUploadProgress(normalizeVodUploadPercent(info));
+        }
+        if (['complete', 'success', 'finish', 'done', 1005].includes(eventName)) {
+          markVodUploadComplete(info);
+        }
+        if (eventName === 'error') {
+          clearVodUploadMonitor();
+          setVodUploadResult(info?.extra || info || '上传失败', 'error');
+        }
+        if (eventName !== 'progress') {
+          log(`[上传事件] ${eventName}: ${safeVodUploadStringify(compactVodUploadInfo(info || {}))}`, eventName === 'error' ? 'error' : 'event');
+        }
+      });
+    } catch {
+      // 兼容不同版本事件差异。
+    }
+  });
+}
+
+function getSelectedVodUploadFile() {
+  const file = document.getElementById('vod-upload-file')?.files?.[0] || null;
+  if (!file) throw new Error('请先选择上传文件');
+  return file;
+}
+
+async function addVodUploadFile() {
+  if (!vodUploader) {
+    await createVodUploader();
+  }
+  if (!vodUploader?.addFile) return;
+  try {
+    const file = getSelectedVodUploadFile();
+    const stsToken = parseVodUploadToken();
+    const type = document.getElementById('vod-upload-file-type').value;
+    vodUploadFileKey = vodUploader.addFile({ file, stsToken, type });
+    setVodUploadProgress(0);
+    setVodUploadResult({ fileKey: vodUploadFileKey, name: file.name, size: file.size, type }, 'success');
+    log(`上传文件已添加: ${file.name}`, 'success');
+  } catch (err) {
+    log(`添加上传文件失败: ${err.message || err}`, 'error');
+    setVodUploadResult(`Error: ${err.message || err}`, 'error');
+  } finally {
+    updateVodUploadStatus();
+  }
+}
+
+async function startVodUpload() {
+  if (!vodUploadFileKey) {
+    await addVodUploadFile();
+  }
+  if (!vodUploadFileKey || !vodUploader?.start) return;
+  try {
+    vodUploader.start(vodUploadFileKey);
+    startVodUploadMonitor(vodUploadFileKey);
+    setVodUploadResult({
+      message: '上传中',
+      fileKey: vodUploadFileKey,
+    });
+    log(`已开始上传: ${vodUploadFileKey}`, 'success');
+  } catch (err) {
+    log(`开始上传失败: ${err.message || err}`, 'error');
+    setVodUploadResult(`Error: ${err.message || err}`, 'error');
+  }
+}
+
+function cancelVodUpload() {
+  if (!vodUploader || !vodUploadFileKey) {
+    log('暂无可取消的上传任务', 'warn');
+    return;
+  }
+  try {
+    clearVodUploadMonitor();
+    if (vodUploader.cancel) vodUploader.cancel(vodUploadFileKey);
+    else if (vodUploader.cancelFile) vodUploader.cancelFile(vodUploadFileKey);
+    else if (vodUploader.removeFile) vodUploader.removeFile(vodUploadFileKey);
+    vodUploadFileKey = '';
+    setVodUploadProgress(0);
+    setVodUploadResult('// 上传任务已取消');
+    log('上传任务已取消', 'success');
+  } catch (err) {
+    log(`取消上传失败: ${err.message || err}`, 'error');
+  } finally {
+    updateVodUploadStatus();
+  }
+}
+
+function resetVodUploader(options = {}) {
+  if (vodUploader) {
+    try {
+      if (vodUploader.cancel && vodUploadFileKey) vodUploader.cancel(vodUploadFileKey);
+      if (vodUploader.destroy) vodUploader.destroy();
+    } catch (err) {
+      if (!options.silent) log(`上传实例重置异常: ${err.message || err}`, 'error');
+    }
+  }
+  vodUploader = null;
+  vodUploadFileKey = '';
+  clearVodUploadMonitor();
+  setVodUploadProgress(0);
+  if (!options.keepSDK && !options.silent) log('上传实例已重置', 'success');
+  updateVodUploadStatus();
+}
+
+function updateVodUploadFileInfo() {
+  const file = document.getElementById('vod-upload-file')?.files?.[0];
+  const el = document.getElementById('vod-upload-file-info');
+  if (!el) return;
+  el.textContent = file ? `${file.name} / ${(file.size / 1024 / 1024).toFixed(2)} MB / ${file.type || '未知类型'}` : '暂无文件';
+  vodUploadFileKey = '';
+  setVodUploadProgress(0);
+  updateVodUploadStatus();
 }
 
 function initInstance() {
@@ -4428,7 +5907,6 @@ function clearOpenApiResult() {
 }
 
 // ========== Callback Workbench ==========
-const callbackConfigStorageKey = 'video-cloud-callback-config';
 const callbackDefaultFunctionUrl = 'https://1302048544-0iyrgnpy6p.ap-hongkong.tencentscf.com';
 let callbackAutoRefreshTimer = null;
 let lastCallbackRecords = [];
@@ -4528,39 +6006,18 @@ function renderCallbackRecords(records) {
 }
 
 function buildCallbackUrl() {
-  const base = getCallbackValue('callback-function-url').replace(/\/+$/, '');
-  return base || '';
+  return callbackDefaultFunctionUrl;
 }
 
 function buildCallbackApiUrl(path = '/callbacks') {
-  const base = getCallbackValue('callback-function-url').replace(/\/+$/, '');
-  if (!base) return '';
+  const base = callbackDefaultFunctionUrl.replace(/\/+$/, '');
   const nextPath = path.startsWith('/') ? path : `/${path}`;
   return `${base}${nextPath}`;
 }
 
-function updateCallbackUrlPreview() {
-  const preview = document.getElementById('callback-url-preview');
-  if (!preview) return;
-  preview.textContent = buildCallbackUrl() || '// 请先填写回调地址';
-}
-
-function saveCallbackConfig() {
-  localStorage.setItem(callbackConfigStorageKey, JSON.stringify({
-    functionUrl: getCallbackValue('callback-function-url'),
-  }));
-  updateCallbackUrlPreview();
-  log('回调配置已保存', 'success');
-}
-
 function loadCallbackConfig() {
-  try {
-    const config = JSON.parse(localStorage.getItem(callbackConfigStorageKey) || '{}');
-    document.getElementById('callback-function-url').value = config.functionUrl || callbackDefaultFunctionUrl;
-  } catch {
-    document.getElementById('callback-function-url').value = callbackDefaultFunctionUrl;
-  }
-  updateCallbackUrlPreview();
+  const input = document.getElementById('callback-function-url');
+  if (input) input.value = callbackDefaultFunctionUrl;
 }
 
 async function copyCallbackUrl() {
@@ -4752,11 +6209,16 @@ function loadOpenApiDraft() {
 document.getElementById('scene-home').addEventListener('click', () => setScene('home'));
 document.getElementById('scene-cloud-phone').addEventListener('click', () => setScene('cloud-phone'));
 document.getElementById('scene-enterprise-live').addEventListener('click', () => setScene('enterprise-live'));
+document.getElementById('scene-rtc-web').addEventListener('click', () => setScene('rtc-web'));
+document.getElementById('scene-vod-player').addEventListener('click', () => setScene('vod-player'));
+document.getElementById('scene-vod-upload').addEventListener('click', () => setScene('vod-upload'));
 document.getElementById('scene-openapi').addEventListener('click', () => setScene('openapi'));
 document.getElementById('scene-callback').addEventListener('click', () => setScene('callback'));
 document.querySelectorAll('[data-target-scene]').forEach(button => {
   button.addEventListener('click', () => setScene(button.dataset.targetScene));
 });
+document.getElementById('vod-player-mode').addEventListener('change', updateVodPlayerStatus);
+document.getElementById('vod-upload-file').addEventListener('change', updateVodUploadFileInfo);
 document.getElementById('theme-select').addEventListener('change', event => {
   applyTheme(event.target.value);
 });
@@ -4776,9 +6238,6 @@ document.getElementById('btn-live-mount').addEventListener('click', () => {
 document.getElementById('btn-live-destroy').addEventListener('click', () => destroyEnterpriseLiveRoom());
 document.getElementById('openapi-result-view-tree').addEventListener('click', () => setOpenApiResultMode('tree'));
 document.getElementById('openapi-result-view-text').addEventListener('click', () => setOpenApiResultMode('text'));
-['callback-function-url'].forEach(id => {
-  document.getElementById(id).addEventListener('input', updateCallbackUrlPreview);
-});
 document.getElementById('openapi-platform').addEventListener('change', () => {
   updateOpenApiProductKindOptions();
   updateOpenApiCredentialStatus();
