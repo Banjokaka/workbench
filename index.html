@@ -3085,7 +3085,7 @@ function bindVodPlayerEvents() {
     try {
       vodPlayerInstance.on(eventName, (...args) => {
         if (eventName === 'timeupdate') return;
-        const brief = args.length ? `: ${formatVodPlayerEventArgs(args)}` : '';
+        const brief = eventName === 'error' && args.length ? `: ${formatVodPlayerEventArgs(args)}` : '';
         log(`[点播播放器事件] ${eventName}${brief}`, eventName === 'error' ? 'error' : 'event');
       });
     } catch {
