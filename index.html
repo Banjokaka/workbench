@@ -1920,6 +1920,18 @@
               <input id="vod-player-token" class="secret-text" type="text" value="" placeholder="Vid 模式播放凭证" autocomplete="off" data-lpignore="true" data-1p-ignore>
             </div>
             <div>
+              <label>AccessKeyID（生成 PlayAuthToken）</label>
+              <input id="vod-player-playauth-ak" class="secret-text" type="text" value="" placeholder="用于本页临时签发" autocomplete="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore>
+            </div>
+            <div>
+              <label>SecretAccessKey（生成 PlayAuthToken）</label>
+              <input id="vod-player-playauth-sk" class="secret-text" type="text" value="" placeholder="仅保存在当前页面" autocomplete="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore>
+            </div>
+            <div>
+              <label>PlayAuthToken 有效期（秒）</label>
+              <input id="vod-player-playauth-expire" type="number" value="3600" min="60" max="86400">
+            </div>
+            <div>
               <label>应用 ID（质量上报）</label>
               <input id="vod-player-line-app-id" value="" placeholder="line_app_id">
             </div>
@@ -1934,6 +1946,7 @@
           </div>
           <div class="openapi-field-note">播放器 License 会校验页面来源，请用 `http://127.0.0.1:4173/` 或线上域名打开，`file://` 方式容易被判定为无效；DirectUrl 模式播放非 MP4 或加密视频时，视频资源需要支持 CORS。</div>
           <div class="openapi-actions">
+            <button type="button" onclick="generateVodPlayerPlayAuthToken()">生成 PlayAuthToken</button>
             <button class="primary" type="button" onclick="loadVodPlayerSDK()">加载 SDK</button>
             <button type="button" onclick="createVodPlayer()">创建播放器</button>
             <button type="button" onclick="playVodPlayer()">播放</button>
@@ -3048,6 +3061,120 @@ function normalizeVodPlayerLicenseConfig(input) {
     return input;
   }
   return { license: normalized };
+}
+
+function canonicalVodTokenQuery(params) {
+  const uriEscape = str => {
+    try {
+      return encodeURIComponent(String(str))
+        .replace(/[^A-Za-z0-9_.~\-%]+/g, escape)
+        .replace(/[*]/g, ch => `%${ch.charCodeAt(0).toString(16).toUpperCase()}`);
+    } catch {
+      return '';
+    }
+  };
+  return Object.keys(params)
+    .filter(key => params[key] !== undefined && params[key] !== null)
+    .sort()
+    .map(key => {
+      const escapedKey = uriEscape(key);
+      if (!escapedKey) return '';
+      const value = params[key];
+      if (Array.isArray(value)) {
+        return `${escapedKey}=${value.map(uriEscape).sort().join(`&${escapedKey}=`)}`;
+      }
+      return `${escapedKey}=${uriEscape(value)}`;
+    })
+    .filter(Boolean)
+    .join('&');
+}
+
+async function signVodTokenQuery({ accessKeyId, secretAccessKey, region = 'cn-north-1', serviceName = 'Vod', params }) {
+  const now = toVolcDate();
+  const shortDate = now.slice(0, 8);
+  const credentialScope = `${shortDate}/${region}/${serviceName}/request`;
+  const paramsMap = {
+    'X-Date': now,
+    'X-NotSignBody': '',
+    'X-Credential': `${accessKeyId}/${credentialScope}`,
+    'X-Algorithm': 'HMAC-SHA256',
+    'X-SignedHeaders': '',
+    'X-SignedQueries': '',
+    ...params,
+  };
+  const sortedForSignedQueries = Object.keys(paramsMap).sort().reduce((map, key) => {
+    map[key] = paramsMap[key];
+    return map;
+  }, {});
+  paramsMap['X-SignedQueries'] = Object.keys(sortedForSignedQueries).join(';');
+  const sortedParams = Object.keys(paramsMap).sort().reduce((map, key) => {
+    map[key] = paramsMap[key];
+    return map;
+  }, {});
+  const canonicalRequest = [
+    'GET',
+    '/',
+    canonicalVodTokenQuery(sortedParams),
+    '\n',
+    '',
+    await sha256Hex(''),
+  ].join('\n');
+  const stringToSign = [
+    'HMAC-SHA256',
+    now,
+    credentialScope,
+    await sha256Hex(canonicalRequest),
+  ].join('\n');
+  const kDate = await hmacBytes(secretAccessKey, shortDate);
+  const kRegion = await hmacBytes(kDate, region);
+  const kService = await hmacBytes(kRegion, serviceName);
+  const kSigning = await hmacBytes(kService, 'request');
+  paramsMap['X-Signature'] = bytesToHex(await hmacBytes(kSigning, stringToSign));
+  return canonicalVodTokenQuery(paramsMap);
+}
+
+async function createVodPlayerPlayAuthToken({ accessKeyId, secretAccessKey, vid, expireSeconds }) {
+  if (!vid) throw new Error('生成 PlayAuthToken 需要先填写 Vid');
+  const query = {
+    Action: 'GetPlayInfo',
+    Version: '2020-08-01',
+    Vid: vid,
+  };
+  if (expireSeconds) query['X-Expires'] = Math.max(60, Number(expireSeconds) || 3600);
+  const getPlayInfoToken = await signVodTokenQuery({
+    accessKeyId,
+    secretAccessKey,
+    params: query,
+  });
+  return btoa(JSON.stringify({
+    GetPlayInfoToken: getPlayInfoToken,
+    TokenVersion: 'V2',
+  }).replace('\\u0026', '&'));
+}
+
+async function generateVodPlayerPlayAuthToken() {
+  const accessKeyId = document.getElementById('vod-player-playauth-ak').value.trim();
+  const secretAccessKey = document.getElementById('vod-player-playauth-sk').value.trim();
+  const vid = document.getElementById('vod-player-vid').value.trim();
+  const expireSeconds = document.getElementById('vod-player-playauth-expire').value.trim();
+  if (!accessKeyId || !secretAccessKey) {
+    log('请先填写用于生成 PlayAuthToken 的 AK/SK', 'error');
+    return;
+  }
+  try {
+    const token = await createVodPlayerPlayAuthToken({
+      accessKeyId,
+      secretAccessKey,
+      vid,
+      expireSeconds,
+    });
+    document.getElementById('vod-player-token').value = token;
+    document.getElementById('vod-player-mode').value = 'vid';
+    updateVodPlayerStatus();
+    log('PlayAuthToken 已生成，并已自动填入播放器参数', 'success');
+  } catch (err) {
+    log(`生成 PlayAuthToken 失败: ${err.message || err}`, 'error');
+  }
 }
 
 function getVodPlayerConfig() {
