@@ -3196,7 +3196,14 @@ function getVodPlayerConfig() {
   if (mode === 'vid') {
     if (!vid) throw new Error('Vid 模式需要填写 Vid');
     config.vid = vid;
-    if (token) config.playAuthToken = token;
+    if (token) {
+      config.getVideoByToken = {
+        ...(config.getVideoByToken || {}),
+        playAuthToken: token,
+      };
+    } else {
+      throw new Error('Vid 模式需要填写或生成 PlayAuthToken');
+    }
   } else {
     if (!url) throw new Error('DirectUrl 模式需要填写视频 URL');
     if (location.protocol === 'https:' && url.startsWith('http://')) {
@@ -3254,7 +3261,7 @@ async function createVodPlayer() {
     vodPlayerInstance = new vodPlayerSDK(config);
     window.__vePlayer = vodPlayerInstance;
     bindVodPlayerEvents();
-    log(`VePlayer 已创建: ${JSON.stringify({ ...config, root: '#vod-player-container', playAuthToken: config.playAuthToken ? '***' : undefined })}`, 'success');
+    log(`VePlayer 已创建: ${JSON.stringify({ ...config, root: '#vod-player-container', getVideoByToken: config.getVideoByToken ? { playAuthToken: '***' } : undefined })}`, 'success');
   } catch (err) {
     vodPlayerInstance = null;
     log(`VePlayer 创建失败: ${err.message || err}`, 'error');
