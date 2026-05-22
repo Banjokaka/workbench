@@ -2133,25 +2133,6 @@
       <div class="openapi-workbench-layout">
         <div class="openapi-main-column">
           <div class="openapi-top-grid">
-          <div class="openapi-box openapi-section">
-            <h3>参数与请求体</h3>
-            <label>业务参数 JSON</label>
-            <textarea id="openapi-body" placeholder='{ }'>{}</textarea>
-            <div class="openapi-field-note">文档里的接口参数填这里即可。GET 会自动放到 URL 参数，POST 会自动放到请求体；Action 和 Version 会从请求地址中解析。</div>
-            <input id="openapi-query" type="hidden" value="{}">
-            <div class="openapi-actions">
-              <button class="primary" type="button" onclick="sendOpenApiRequest()">发送请求</button>
-              <button type="button" onclick="previewOpenApiRequest({ show: true })">生成请求预览</button>
-              <button type="button" onclick="copyOpenApiCurl()">复制 cURL</button>
-              <button type="button" onclick="saveOpenApiDraft()">保存草稿</button>
-              <button type="button" onclick="loadOpenApiDraft()">加载草稿</button>
-              <button type="button" onclick="clearOpenApiResult()">清空结果</button>
-            </div>
-            <details id="openapi-preview-details" class="openapi-preview-details">
-              <summary>请求预览</summary>
-              <div id="openapi-preview" class="openapi-request-preview">// 还没有生成请求</div>
-            </details>
-          </div>
           <div class="openapi-box openapi-section openapi-parse-panel">
             <h3>解析结果</h3>
             <div class="openapi-board-fields">
@@ -2200,6 +2181,25 @@
               </div>
             </div>
             <div class="openapi-field-note">文档链接或请求地址会自动解析这些字段，也可以按需手动修改。</div>
+          </div>
+          <div class="openapi-box openapi-section">
+            <h3>参数与请求体</h3>
+            <label>业务参数 JSON</label>
+            <textarea id="openapi-body" placeholder='{ }'>{}</textarea>
+            <div class="openapi-field-note">文档里的接口参数填这里即可。GET 会自动放到 URL 参数，POST 会自动放到请求体；Action 和 Version 会从请求地址中解析。</div>
+            <input id="openapi-query" type="hidden" value="{}">
+            <div class="openapi-actions">
+              <button class="primary" type="button" onclick="sendOpenApiRequest()">发送请求</button>
+              <button type="button" onclick="previewOpenApiRequest({ show: true })">生成请求预览</button>
+              <button type="button" onclick="copyOpenApiCurl()">复制 cURL</button>
+              <button type="button" onclick="saveOpenApiDraft()">保存草稿</button>
+              <button type="button" onclick="loadOpenApiDraft()">加载草稿</button>
+              <button type="button" onclick="clearOpenApiResult()">清空结果</button>
+            </div>
+            <details id="openapi-preview-details" class="openapi-preview-details">
+              <summary>请求预览</summary>
+              <div id="openapi-preview" class="openapi-request-preview">// 还没有生成请求</div>
+            </details>
           </div>
           </div>
           <div id="openapi-result-panel" class="openapi-result-section openapi-box">
