@@ -636,6 +636,9 @@
     gap: 12px;
     align-items: start;
   }
+  .vod-player-primary-actions {
+    margin: 8px 0 12px;
+  }
   .vod-upload-layout {
     display: grid;
     grid-template-columns: minmax(430px, .78fr) minmax(520px, 1fr);
@@ -1876,6 +1879,14 @@
       <div class="vod-player-layout">
         <div class="openapi-box openapi-section">
           <h3>点播播放器参数</h3>
+          <div class="openapi-actions vod-player-primary-actions">
+            <button type="button" onclick="generateVodPlayerPlayAuthToken()">生成 PlayAuthToken</button>
+            <button class="primary" type="button" onclick="loadVodPlayerSDK()">加载 SDK</button>
+            <button type="button" onclick="createVodPlayer()">创建播放器</button>
+            <button type="button" onclick="playVodPlayer()">播放</button>
+            <button type="button" onclick="pauseVodPlayer()">暂停</button>
+            <button type="button" onclick="destroyVodPlayer()">销毁播放器</button>
+          </div>
           <div class="vod-form-grid">
             <div class="full">
               <label>SDK JS 地址</label>
@@ -1945,14 +1956,6 @@
             </div>
           </div>
           <div class="openapi-field-note">播放器 License 会校验页面来源，请用 `http://127.0.0.1:4173/` 或线上域名打开，`file://` 方式容易被判定为无效；DirectUrl 模式播放非 MP4 或加密视频时，视频资源需要支持 CORS。</div>
-          <div class="openapi-actions">
-            <button type="button" onclick="generateVodPlayerPlayAuthToken()">生成 PlayAuthToken</button>
-            <button class="primary" type="button" onclick="loadVodPlayerSDK()">加载 SDK</button>
-            <button type="button" onclick="createVodPlayer()">创建播放器</button>
-            <button type="button" onclick="playVodPlayer()">播放</button>
-            <button type="button" onclick="pauseVodPlayer()">暂停</button>
-            <button type="button" onclick="destroyVodPlayer()">销毁播放器</button>
-          </div>
         </div>
         <div class="openapi-box openapi-section">
           <h3>播放器预览</h3>
