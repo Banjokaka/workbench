@@ -598,7 +598,15 @@
   }
   .openapi-board-fields {
     display: grid;
-    gap: 6px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .openapi-board-field.full {
+    grid-column: 1 / -1;
+  }
+  .openapi-board-field label {
+    margin-top: 0;
   }
   .openapi-credential-section {
     border: 1px solid rgba(249, 199, 79, .28);
@@ -872,6 +880,12 @@
     grid-template-columns: minmax(520px, 1fr) minmax(420px, 0.82fr);
     gap: 12px;
     align-items: start;
+  }
+  .openapi-main-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
   }
   .openapi-response-column {
     display: flex;
@@ -1670,51 +1684,23 @@
 
     <div class="section openapi-only openapi-credential-section">
       <h3>需要填写</h3>
+      <label>OpenAPI 文档链接</label>
+      <input id="openapi-doc-url" value="" placeholder="https://www.volcengine.com/docs/..." autocomplete="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore>
+      <div id="openapi-doc-status" class="openapi-doc-status">粘贴文档链接后会自动生成请求地址、方法和业务参数。</div>
       <div id="openapi-credential-status" class="credential-status">发送 OpenAPI 前需要填写 AK/SK。</div>
-      <label>已保存 AK/SK</label>
-      <select id="openapi-credential-profile"></select>
-      <label>保存名称</label>
-      <input id="openapi-credential-name" value="" placeholder="例如：客户A / 测试环境" autocomplete="off">
       <label>AccessKeyID</label>
       <input id="openapi-ak" class="secret-text" type="text" value="" placeholder="AK" autocomplete="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore>
       <label>SecretAccessKey</label>
       <input id="openapi-sk" class="secret-text" type="text" value="" placeholder="SK" autocomplete="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore>
+      <label>保存名称</label>
+      <input id="openapi-credential-name" value="" placeholder="例如：客户A / 测试环境" autocomplete="off">
+      <label>已保存 AK/SK</label>
+      <select id="openapi-credential-profile"></select>
       <div style="display:flex;gap:6px;margin-top:6px">
         <button id="btn-openapi-save-credentials" type="button" style="flex:1;font-size:var(--fs-control)">保存 AK/SK</button>
         <button id="btn-openapi-delete-credentials" type="button" style="font-size:var(--fs-control)">删除</button>
       </div>
       <span class="hint">AK/SK 只临时保存在当前页面会话中，关闭页面后清除；切换产品不会自动更换密钥，请按需手动选择。</span>
-    </div>
-
-
-    <div class="section openapi-only">
-      <h3>OpenAPI 看板</h3>
-      <label>请求地址</label>
-      <input id="openapi-request-url" value="" placeholder="https://open.volcengineapi.com?Action=DetailPod&Version=2025-05-01">
-      <span class="hint">粘贴火山 OpenAPI 文档里的请求地址，会自动拆出 Endpoint / Action / Version；Service 和 Region 由产品选择自动填充</span>
-      <label>平台</label>
-      <select id="openapi-platform"></select>
-      <label>产品</label>
-      <select id="openapi-product-kind"></select>
-      <label>区域</label>
-      <select id="openapi-product"></select>
-      <div class="openapi-board-fields" style="margin-top:8px">
-        <label>Region</label>
-        <input id="openapi-region" value="" placeholder="选择产品后自动填充">
-        <label>Endpoint</label>
-        <input id="openapi-endpoint" value="" placeholder="https://open.volcengineapi.com/">
-        <label>Service</label>
-        <input id="openapi-service" value="" placeholder="选择产品后自动填充">
-        <label>Method</label>
-        <select id="openapi-method">
-          <option value="POST">POST</option>
-          <option value="GET">GET</option>
-        </select>
-        <label>Version</label>
-        <input id="openapi-version" value="" placeholder="API Version">
-        <label>Action</label>
-        <input id="openapi-action" value="" placeholder="OpenAPI Action">
-      </div>
     </div>
 
   </div>
@@ -2095,32 +2081,75 @@
     </div>
     <div id="openapi-workbench" class="openapi-only">
       <div class="openapi-workbench-layout">
-        <div class="openapi-box openapi-section">
-          <h3>参数与请求体</h3>
-          <div class="openapi-doc-row">
-            <div>
-              <label>OpenAPI 文档链接</label>
-              <input id="openapi-doc-url" value="" placeholder="https://www.volcengine.com/docs/...">
+        <div class="openapi-main-column">
+          <div class="openapi-box openapi-section">
+            <h3>参数与请求体</h3>
+            <label>业务参数 JSON</label>
+            <textarea id="openapi-body" placeholder='{ }'>{}</textarea>
+            <div class="openapi-field-note">文档里的接口参数填这里即可。GET 会自动放到 URL 参数，POST 会自动放到请求体；Action 和 Version 会从请求地址中解析。</div>
+            <input id="openapi-query" type="hidden" value="{}">
+            <div class="openapi-actions">
+              <button class="primary" type="button" onclick="sendOpenApiRequest()">发送请求</button>
+              <button type="button" onclick="previewOpenApiRequest({ show: true })">生成请求预览</button>
+              <button type="button" onclick="copyOpenApiCurl()">复制 cURL</button>
+              <button type="button" onclick="saveOpenApiDraft()">保存草稿</button>
+              <button type="button" onclick="loadOpenApiDraft()">加载草稿</button>
+              <button type="button" onclick="clearOpenApiResult()">清空结果</button>
             </div>
-            <button id="btn-openapi-doc-template" type="button">从文档生成模板</button>
+            <details id="openapi-preview-details" class="openapi-preview-details">
+              <summary>请求预览</summary>
+              <div id="openapi-preview" class="openapi-request-preview">// 还没有生成请求</div>
+            </details>
           </div>
-          <div id="openapi-doc-status" class="openapi-doc-status">粘贴火山引擎 OpenAPI 文档链接后，会优先从请求示例识别请求地址、方法和业务参数。</div>
-          <label>业务参数 JSON</label>
-          <textarea id="openapi-body" placeholder='{ }'>{}</textarea>
-          <div class="openapi-field-note">文档里的接口参数填这里即可。GET 会自动放到 URL 参数，POST 会自动放到请求体；Action 和 Version 会从请求地址中解析。</div>
-          <input id="openapi-query" type="hidden" value="{}">
-          <div class="openapi-actions">
-            <button class="primary" type="button" onclick="sendOpenApiRequest()">发送请求</button>
-            <button type="button" onclick="previewOpenApiRequest({ show: true })">生成请求预览</button>
-            <button type="button" onclick="copyOpenApiCurl()">复制 cURL</button>
-            <button type="button" onclick="saveOpenApiDraft()">保存草稿</button>
-            <button type="button" onclick="loadOpenApiDraft()">加载草稿</button>
-            <button type="button" onclick="clearOpenApiResult()">清空结果</button>
+          <div class="openapi-box openapi-section">
+            <h3>解析结果</h3>
+            <div class="openapi-board-fields">
+              <div class="openapi-board-field full">
+                <label>请求地址</label>
+                <input id="openapi-request-url" value="" placeholder="https://open.volcengineapi.com?Action=DetailPod&Version=2025-05-01">
+              </div>
+              <div class="openapi-board-field">
+                <label>平台</label>
+                <select id="openapi-platform"></select>
+              </div>
+              <div class="openapi-board-field">
+                <label>产品</label>
+                <select id="openapi-product-kind"></select>
+              </div>
+              <div class="openapi-board-field">
+                <label>区域</label>
+                <select id="openapi-product"></select>
+              </div>
+              <div class="openapi-board-field">
+                <label>Region</label>
+                <input id="openapi-region" value="" placeholder="选择产品后自动填充">
+              </div>
+              <div class="openapi-board-field">
+                <label>Endpoint</label>
+                <input id="openapi-endpoint" value="" placeholder="https://open.volcengineapi.com/">
+              </div>
+              <div class="openapi-board-field">
+                <label>Service</label>
+                <input id="openapi-service" value="" placeholder="选择产品后自动填充">
+              </div>
+              <div class="openapi-board-field">
+                <label>Method</label>
+                <select id="openapi-method">
+                  <option value="POST">POST</option>
+                  <option value="GET">GET</option>
+                </select>
+              </div>
+              <div class="openapi-board-field">
+                <label>Version</label>
+                <input id="openapi-version" value="" placeholder="API Version">
+              </div>
+              <div class="openapi-board-field">
+                <label>Action</label>
+                <input id="openapi-action" value="" placeholder="OpenAPI Action">
+              </div>
+            </div>
+            <div class="openapi-field-note">文档链接或请求地址会自动解析这些字段，也可以按需手动修改。</div>
           </div>
-          <details id="openapi-preview-details" class="openapi-preview-details">
-            <summary>请求预览</summary>
-            <div id="openapi-preview" class="openapi-request-preview">// 还没有生成请求</div>
-          </details>
         </div>
         <div class="openapi-response-column">
           <div id="openapi-result-panel" class="openapi-result-section openapi-box">
@@ -4461,6 +4490,9 @@ function buildUI() {
 let openApiRequestUrlParseTimer = null;
 let openApiRequestUrlWatchTimer = null;
 let lastParsedOpenApiRequestUrl = '';
+let openApiDocTemplateTimer = null;
+let openApiDocTemplateSeq = 0;
+let lastGeneratedOpenApiDocUrl = '';
 const openApiProxyUrl = 'https://1302048544-3u2mhvy9ln.ap-hongkong.tencentscf.com';
 let openApiResultMode = 'tree';
 let lastOpenApiResult = '// 等待请求';
@@ -5739,7 +5771,39 @@ function parseOpenApiDoc(text, docUrl) {
   };
 }
 
-async function generateOpenApiTemplateFromDoc() {
+function getCurrentOpenApiDocHref() {
+  const url = getOpenApiValue('openapi-doc-url');
+  if (!url) return '';
+  try {
+    return new URL(url).href;
+  } catch {
+    return '';
+  }
+}
+
+function scheduleOpenApiDocTemplateGenerate() {
+  if (openApiDocTemplateTimer) clearTimeout(openApiDocTemplateTimer);
+  const url = getOpenApiValue('openapi-doc-url');
+  if (!url) {
+    lastGeneratedOpenApiDocUrl = '';
+    setOpenApiDocStatus('粘贴文档链接后会自动生成请求地址、方法和业务参数。');
+    return;
+  }
+  try {
+    const parsed = new URL(url);
+    if (!/^https?:$/.test(parsed.protocol)) return;
+    if (getCurrentOpenApiDocHref() === lastGeneratedOpenApiDocUrl) return;
+    setOpenApiDocStatus('已检测到文档链接，稍后自动生成模板...');
+  } catch {
+    return;
+  }
+  openApiDocTemplateTimer = setTimeout(() => {
+    generateOpenApiTemplateFromDoc({ auto: true });
+  }, 800);
+}
+
+async function generateOpenApiTemplateFromDoc(options = {}) {
+  const isAuto = options.auto === true;
   const url = getOpenApiValue('openapi-doc-url');
   if (!url) {
     setOpenApiDocStatus('请先粘贴 OpenAPI 文档链接。', 'error');
@@ -5749,12 +5813,17 @@ async function generateOpenApiTemplateFromDoc() {
   try {
     parsedUrl = new URL(url);
   } catch {
+    if (isAuto) return;
     setOpenApiDocStatus('文档链接格式不正确。', 'error');
     return;
   }
+  if (parsedUrl.href === lastGeneratedOpenApiDocUrl) return;
+  const currentSeq = ++openApiDocTemplateSeq;
   setOpenApiDocStatus('正在读取文档并生成参数模板...');
   try {
     const text = await fetchOpenApiDocText(parsedUrl.href);
+    if (isAuto && currentSeq !== openApiDocTemplateSeq) return;
+    if (isAuto && getCurrentOpenApiDocHref() !== parsedUrl.href) return;
     const parsed = parseOpenApiDoc(text, parsedUrl.href);
     if (parsed.requestUrl) {
       setOpenApiValue('openapi-request-url', parsed.requestUrl);
@@ -5775,8 +5844,10 @@ async function generateOpenApiTemplateFromDoc() {
       Object.keys(parsed.template).length ? `参数 ${Object.keys(parsed.template).length} 个` : '未识别请求示例参数',
     ];
     setOpenApiDocStatus(`已从请求示例生成模板：${pieces.join('，')}。请检查参数后再发送。`, Object.keys(parsed.template).length ? 'success' : 'info');
+    lastGeneratedOpenApiDocUrl = parsedUrl.href;
     log(`已从文档链接生成 OpenAPI 模板: ${parsed.action || '未识别 Action'}`, Object.keys(parsed.template).length ? 'success' : 'warn');
   } catch (err) {
+    if (isAuto && currentSeq !== openApiDocTemplateSeq) return;
     setOpenApiDocStatus(`${err.message || err}。如果浏览器拦截读取，可以先手动粘贴请求地址和参数。`, 'error');
     log(`文档模板生成失败: ${err.message || err}`, 'error');
   }
@@ -6393,7 +6464,23 @@ function loadOpenApiDraft() {
   log('OpenAPI 草稿已加载', 'success');
 }
 
+function disableNativeAutocomplete() {
+  const nonce = Math.random().toString(36).slice(2);
+  document.querySelectorAll('input, textarea').forEach(el => {
+    const type = (el.getAttribute('type') || 'text').toLowerCase();
+    if (['button', 'checkbox', 'file', 'hidden', 'radio', 'range', 'submit'].includes(type)) return;
+    el.setAttribute('autocomplete', 'new-password');
+    el.setAttribute('autocorrect', 'off');
+    el.setAttribute('autocapitalize', 'off');
+    el.setAttribute('spellcheck', 'false');
+    el.setAttribute('data-lpignore', 'true');
+    el.setAttribute('data-1p-ignore', 'true');
+    el.setAttribute('name', `no-browser-suggest-${el.id || 'field'}-${nonce}`);
+  });
+}
+
 // ========== Event Bindings ==========
+disableNativeAutocomplete();
 document.getElementById('scene-home').addEventListener('click', () => setScene('home'));
 document.getElementById('scene-cloud-phone').addEventListener('click', () => setScene('cloud-phone'));
 document.getElementById('scene-enterprise-live').addEventListener('click', () => setScene('enterprise-live'));
@@ -6451,9 +6538,9 @@ document.getElementById('btn-openapi-save-credentials').addEventListener('click'
 document.getElementById('btn-openapi-delete-credentials').addEventListener('click', () => {
   deleteOpenApiSessionCredentials();
 });
-document.getElementById('btn-openapi-doc-template').addEventListener('click', () => {
-  generateOpenApiTemplateFromDoc();
-});
+document.getElementById('openapi-doc-url').addEventListener('input', scheduleOpenApiDocTemplateGenerate);
+document.getElementById('openapi-doc-url').addEventListener('paste', scheduleOpenApiDocTemplateGenerate);
+document.getElementById('openapi-doc-url').addEventListener('change', scheduleOpenApiDocTemplateGenerate);
 document.getElementById('btn-openapi-clear-history').addEventListener('click', () => {
   clearOpenApiHistory();
 });
